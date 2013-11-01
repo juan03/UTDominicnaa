@@ -1,0 +1,289 @@
+﻿@model List<UTDOMINICANA.Models.Vendors>
+@using UTDOMINICANA.Content;
+
+@{
+    
+        ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+
+}
+@{
+    
+    
+}
+
+
+<div class="portlet box red page-content content-wrapper clear-fix">
+    <div class="tittle" style="background-color: rgba(53,170,71,0.8); border: 1px; border-radius: 20px !important; padding: 10px 10px 10px 10px; margin-bottom: 10px">
+
+        <div class="tile bg-green">
+
+
+            <div class="tile-object">
+                <div class="name" style="font-weight: bold; font-size: 22px">
+                    <h3><i class="icon-user big">&nbsp;</i>Vendedores</h3>
+                </div>
+                <div class="number"></div>
+            </div>
+        </div>
+
+
+    </div>
+    @using (Html.BeginForm("Index", "Vendors", FormMethod.Get, new { @role = "form", @class = "form", @style = "background-color:rgba(255,255,255,1);border:1px;border-radius:20px !important;padding:10px 10px 10px 10px" }))
+    {
+        <div class="form">
+        <div class="controls">
+            <div class="form-group">
+                <label for="vendedor">Vendedor</label>
+                <input class="m-wrap input-lg span6" name="vendedor" type="text" id="id" />
+            </div>
+            <div class="form-group">
+                <label for="combobox">Estado</label>
+                <select class="form-control input-lg span6" name="status" id="combobox">
+                    <option value="0" title="Todos">Todos</option>
+                    <option value="1">Activo</option>
+                    <option value="2">Inactivo</option>
+                    <option value="3">Bloqueado</option>
+                </select>
+                 <div class="form-group">
+           <button type="submit" class="btn blue">Buscar&nbsp;<i class="icon-search big"></i></button></div>
+            </div>
+        </div>
+            </div>
+    }
+    <div style="background-color: rgba(53,170,71,0.8); border: 1px; border-radius: 20px !important; padding: 10px 10px 10px 10px; margin-bottom: 10px">
+
+        <div class="row-fluid">
+            <button class="btn ">
+                Excel
+										<i class=" icon-download-alt big"></i>
+
+
+            </button>
+            <button class="btn" onclick=" PrintElem(table)">
+                Imprimir
+										<i class="icon-print big"></i>
+
+
+            </button>
+             <a style="text-decoration:none" class="btn" data-toggle="modal" href="#responsive2"  onclick=" PrintElem(table)">
+                Adicionar Vendedor
+										<i class=" icon-plus-sign big"></i>
+
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="table-responsive" style="background-color: rgba(255,255,255,1); border: 1px; border-radius: 20px !important; padding: 10px 10px 10px 10px">
+        <div class="content-wrapper">
+            <table id="mytable" class="table table-bordered table-advanced">
+                <thead>
+                    <tr>
+                        <th>Opcion</th>
+                        <th>nombre</th>
+                        <th>telefono</th>
+                        <th>identificacion</th>
+                        <th>idFactura</th>
+                        <th>email</th>
+                        <th>distribuidor</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var key in Model)
+                        {
+                        <tr id="@key.id">
+                            <td><a type="button" class="btnEdit btn blue" id="btnEdit"  data-toggle="modal" href="#responsive" data-id="@key.id" style="text-decoration:none"><i class="icon-edit big">&nbsp;</i>Editar</a>
+                                <a  class="btnDelete btn red" id="btnDelete" data-id="@key.id" style="text-decoration:none"><i class="icon-trash big">&nbsp;</i>Borrar</a>
+                            </td>
+                            
+                            <td id="rowId" hidden="hidden"></td>
+                            <td>@key.nombre</td>
+                            <td>@key.telefono</td>
+                            <td>@key.identificacion</td>
+                            <td>@key.idFactura</td>
+                            <td>@key.email</td>
+                            <td>@key.distribuidor</td>
+                        </tr>
+                        }
+                    }
+                </tbody>
+
+
+
+            </table>
+
+        </div>
+    </div>
+    <div class="modal-scrollable" style="z-index: 10050;">
+        <div id="responsive" class="modal hide fade" tabindex="-1" data-focus-on="input:first" style="display: none;" aria-hidden="false">
+            <div class="modal-header" style="background-color: rgba(126,150,66,0.4)">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3>Editar Vendedor&nbsp;<i class="icon-edit"></i></h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="row-fluid">
+                    <div class="span6">
+                        <label for="Nombre">Nombre</label>
+                        <input type="text" id="Nombre1" name="Nombre" class=" m-wrap span12" />
+
+                    </div>
+                    <div class="span6">
+                        <label for="Identificacion">Identificacion</label>
+                        <input type="text" id="Identificacion1" name="Identificacion" class=" m-wrap span12" />
+
+                    </div>
+
+                    <div class="span6" style="margin-left: 0px;">
+                        <label for="Email">Email</label>
+                        <input type="text" id="Email1" name="Email" class="m-wrap span12" />
+
+
+                    </div>
+                    <div class="span6">
+                        <label for="apellidomodal">Telefono</label>
+                        <input type="text" id="Telefono1" name="Telefono" class="m-wrap span12" />
+
+                    </div>
+                    <div class="span6" style="margin-left: 0px;">
+                        <label for="billingid">ID factura</label>
+                        <input id="billingid1" name="billingid" type="text" class="form-control input-lg m-wrap span12" />
+
+                    </div>
+                    <div class="span6">
+                        <label for="combobox2">Estado</label>
+                        <select class="form-control input-lg span12" style="height: 32px; margin-top: 5px;" name="status" id="combobox2">
+                            <option value="0" title="Todos">Todos</option>
+                            <option value="1">Activo</option>
+                            <option value="2">Inactivo</option>
+                            <option value="3">Bloqueado</option>
+                        </select>
+
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" data-dismiss="modal" class="btn">Cerrar</button>
+                <button type="button" class="btn blue">Guardar</button>
+            </div>
+        </div>
+  
+
+    
+        <div id="responsive2" class="modal hide fade" tabindex="-1" data-focus-on="input:first" style="display: none; margin-top: -20px;" aria-hidden="false">
+            <div class="modal-header" style="background-color: rgba(126,150,66,0.4)">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3>Adicionar Vendedor&nbsp;<i class="icon-edit"></i></h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="row-fluid">
+                    <div class="span6">
+                        <label for="Nombre">Nombre</label>
+                        <input type="text" id="Nombre" name="Nombre" class=" m-wrap span12" />
+
+                    </div>
+                    <div class="span6">
+                        <label for="Identificacion">Identificacion</label>
+                        <input type="text" id="Identificacion" name="Identificacion" class=" m-wrap span12" />
+
+                    </div>
+
+                    <div class="span6" style="margin-left: 0px;">
+                        <label for="Email">Email</label>
+                        <input type="text" id="Email" name="Email" class="m-wrap span12" />
+
+
+                    </div>
+                    <div class="span6">
+                        <label for="apellidomodal">Telefono</label>
+                        <input type="text" id="Telefono" name="Telefono" class="m-wrap span12" />
+
+                    </div>
+                    <div class="span6" style="margin-left: 0px;">
+                        <label for="billingid">ID factura</label>
+                        <input id="billingid" name="billingid" type="text" class="form-control input-lg m-wrap span12" />
+
+                    </div>
+                    <div class="span6">
+                        <label for="combobox2">Estado</label>
+                        <select class="form-control input-lg span12" style="height: 32px; margin-top: 5px;" name="status" id="combobox">
+                            <option value="0" title="Todos">Todos</option>
+                            <option value="1">Activo</option>
+                            <option value="2">Inactivo</option>
+                            <option value="3">Bloqueado</option>
+                        </select>
+
+                    </div>
+
+
+
+
+                </div>
+
+                <div class="modal-header" style="background-color: rgba(126,150,66,0.4); margin: auto -15px auto -15px">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h3>Informacion de Usuario&nbsp;<i class="icon-edit"></i></h3>
+                </div>
+
+                <div class="row-fluid">
+                    <div class="span6">
+                        <label for="Usuario">Usuario</label>
+                        <input type="text" id="Usuario" name="Usuario" class=" m-wrap span12" />
+
+                    </div>
+                    <div class="span6">
+                        <label for="Clave">Clave</label>
+                        <input type="text" id="Clave" name="Clave" class=" m-wrap span12" />
+
+                    </div>
+                    <div class="span6" style="margin-left: 0px;">
+                        <label for="rClave">Repetir Clave</label>
+                        <input type="text" id="rClave" name="rClave" class=" m-wrap span12" />
+
+                    </div>
+                    <div class="span6">
+                        <label for="comboboxs">Idioma</label>
+                        <select class="form-control input-lg span12" style="height: 32px; margin-top: 5px;" name="status" id="comboboxs">
+
+                            <option value="1">English</option>
+                            <option value="2">Espanol</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" data-dismiss="modal" class="btn">Cerrar</button>
+                <button type="button" class="btn blue">Adicionar</button>
+            </div>
+        </div>
+
+
+
+
+
+
+
+</div>
+    </div>
+
+
+ 
+
+

@@ -1,0 +1,617 @@
+﻿@model UTDOMINICANA.Models.Stores
+ @Styles.Render("~/Content/css3")
+ <script>
+    
+     $(document).ready(function () {
+         $('.field-validation-error').each(function () {
+             // Get the name of the element the error message is intended for
+             // Note: ASP.NET MVC replaces the '[', ']', and '.' characters with an
+             // underscore but the data-valmsg-for value will have the original characters
+             var inputElem = '#' + $(this).attr('data-valmsg-for').replace('.', '_').replace('[', '_').replace(']', '_');
+
+             var corners = ['left center', 'right center'];
+             var flipIt = $(inputElem).parents('span.right').length > 0;
+
+             // Hide the default validation error
+             $(this).hide();
+
+             // Show the validation error using qTip
+             $(inputElem).filter(':not(.valid)').qtip({
+                 content: { text: $(this).text() }, // Set the content to be the error message
+                 position: {
+                     my: corners[flipIt ? 0 : 1],
+                     at: corners[flipIt ? 1 : 0],
+                     viewport: $(window)
+                 },
+                 show: { ready: true },
+                 hide: false,
+                 style: { classes: 'ui-tooltip-red' }
+             });
+         });
+         $("#searchRows select").attr("class", "input-lg m-wrap span8");
+         $("#searchRows select").attr("style", "max-height: 25px !important;font-size:12px");
+         $("#addStoreForm select").attr("class", "input-lg m-wrap span7 required");
+         $("#addStoreForm select").attr("style", "max-height: 25px !important;font-size:12px"); 
+         $("#editStoreForm select").attr("style", "max-height: 25px !important;font-size:12px");
+         $("#editStoreForm select").attr("class", "input-lg m-wrap span7 required");
+         $('#saveButton').click(function (event)
+         {
+            
+             var result =$('#addForm').validate();
+             result.showErrors();
+             $('#addForm').submit();
+             if (result.valid()) {
+                 alert("strill valid");
+             } else {
+                 event.preventDefault();
+             }
+     
+         });
+         $('#btnshowAgregar').click(function () {
+             $('#searchForm').fadeOut(50);
+             $('#addStoreForm').fadeIn(50);
+            
+
+         });
+         $('#btnSearch').click(function () {
+             var result = $('#searchFormu').validate();
+             result.showErrors()
+            
+             if (result.valid())
+             {
+                 $('#searchFormu').submit();
+             }
+         });
+         $('#ok').click(function () {
+             $('#searchForm').fadeIn(50);
+             $('#addStoreForm').fadeOut(50);
+             $('#ResultPage').fadeOut(50);
+
+         });
+         $('#cancelButton').click(function () {
+             $('#addStoreForm').fadeOut(50);
+             $('#searchForm').fadeIn(50);
+         });
+         
+     });
+        </script>
+<div id="searchForm" style="">
+<div class="portlet box  page-content content-wrapper clear-fix">
+    <div class="tittle" style="background-color: rgba(0,128,0,0.8); border: 1px; border-radius: 20px !important; margin-bottom: 10px;margin-top:-50px">
+
+        <div class="bg-green" style="border-radius:20px !important">
+            <div class="">
+                <div class="name" style="font-weight: bold; font-size: 22px">
+                    <h5 style="text-align: left; font-weight: bold; font-family: 'Agency FB'; font-size: 22px"><i class="glyphicon glyphicon-user big">&nbsp;</i>COMERCIOS</h5>
+                </div>
+                <div class="number"></div>
+            </div>
+        </div>
+       
+
+    </div>
+    
+    @using (Html.BeginForm("Index", "Store", FormMethod.Post, new {@id="searchFormu", @role = "form", @class = "form", @style = "background-color:rgba(255,255,255,1);border:1px;border-radius:20px !important;padding:10px 10px 10px 10px" }))
+    {
+
+        <div class="controls">
+            <div class="form-group">
+                <div class="row-fluid" id="searchRows">
+                    <div class="span4" >
+                        <div class="span12">
+                            @Html.LabelFor(m => m.ID, new { @class = "span4", @style = "white-space:nowrap;margin-left:8px !important" })
+                            @Html.TextBoxFor(m => m.ID, new { @class = "input-lg m-wrap span6 number",@title="",@maxlength="10", @name = "distributorID" })
+                           
+                        </div>
+                         <div class="span12">
+                            @Html.LabelFor(m => m.PHONE, new { @class = "span4" })
+                            @Html.TextBoxFor(m => m.PHONE, new { @class = "input-lg m-wrap span8 number",@maxlength="10",@minlength="10", @name = "phone" })
+                        </div>
+                          <div class="span12">
+                            @Html.LabelFor(m => m.PAYMENT_TYPE, new { @class = "span4", @Styles = "white-space:nowrap",})
+                            @Html.DropDownList("BillingTypes", "Seleccione Tipo")
+                        </div>
+                        <div class="span12">
+                             @Html.LabelFor(m => m.CHAIN, new { @class = "span4", @Styles = "white-space:nowrap" })
+                             @Html.TextBoxFor(m => m.CHAIN, new { @class = "input-lg m-wrap span8", @name = "chain" })
+                        </div>
+                         <div class="span12">
+                           @Html.Label("RNC", "Registro", new { @class = "span4" })
+                           @Html.TextBoxFor(m => m.RNC, new { @class = "input-lg m-wrap span4", @name = "register" })
+                        </div>
+                    </div>
+                    <div class="span4">
+                        <div class="span12">
+                            @Html.LabelFor(m => m.NAME, new { @class = "span4", @style = "white-space:nowrap;margin-left:8px !important" })
+                            @Html.TextBoxFor(m => m.NAME, new { @class = "input-lg m-wrap span6", @name = "Name" })
+                        </div>
+                        <div class="span12">
+                            @Html.LabelFor(m => m.CITY, new { @class = "span4", @Styles = "white-space:nowrap" })
+                            @Html.DropDownList("Cities", "Seleccione una ciudad")
+                        </div>
+                        <div class="span12">
+                            @Html.LabelFor(m => m.MCATEGORY, new { @class = "span4", @Styles = "white-space:nowrap" })
+                     
+                            @Html.DropDownList("categories", "Seleccione una categoria")
+                        </div>
+                        <div class="span12">
+                             @Html.LabelFor(m => m.VENDOR, new { @class = "span4", @Styles = "white-space:nowrap" })
+                             @Html.TextBoxFor(m => m.VENDOR, new { @class = "input-lg m-wrap span8", @name = "vendor" })
+                        </div>
+                    </div>
+                    <div class="span4">
+                        <div class="span12">
+                             @Html.LabelFor(m => m.VENDOR, new { @class = "span4", @style = "white-space:nowrap;display:none" })
+                             @Html.TextBoxFor(m => m.VENDOR, new { @class = "input-lg m-wrap span8", @name = "vendor", @style = "white-space:nowrap;display:none" })
+                        </div>
+                        <div class="span12">
+                            @Html.LabelFor(m => m.COUNTRY, new { @class = "span4", @Styles = "white-space:nowrap" })
+                            @Html.DropDownList("Countries", "Seleccione un Pais")
+                        </div>
+                        <div class="span12">
+                             @Html.LabelFor(m => m.STATUS, new { @class = "span4" })
+                             @Html.DropDownList("status", "Seleccione una ciudad")
+                        </div>
+                        <div class="span12">
+                           @Html.LabelFor(m => m.DISTRIBUTOR, new { @class = "span4", @Styles = "white-space:nowrap" })
+                           @Html.DropDownList("distributorList", "Seleccione un Distribuidor")
+                        </div>
+
+
+                    </div>
+                    
+                </div>
+                    </div>
+            </div>
+
+    
+  
+          
+   
+     <div style="border:1px;border-radius:20px !important;padding:10px 10px 10px 10px;" class="bg-green">
+
+            <div class="row-fluid">
+                
+                <div class="span12">
+                    <div class="span3">
+                                    <button  id="btnSearch" class="btn blue span6" >
+                                        BUSCAR<i  class="icon-search white"></i>
+                                    </button>
+                       <button class="btn yellow span6" id="btnshowAgregar" onclick=" hidesearchForm();showFormNew(); " data-toggle="modal" >AGREGAR
+										<i class="icon-plus-sign "></i>
+									</button>
+           
+
+
+                    </div>
+                    <div class="span3"></div>
+                    <div class="span3"></div>
+                    <div class="span3">
+									<button class="btn blue span6" onclick="window.print(); return false;">IMPRIMIR
+										<i class="icon-print "></i>
+									</button>
+                        <button class="btn purple span6">EXCEL
+										<i class="icon-download-alt "></i></button>
+                                    
+					</div>				
+			</div>
+
+              </div>
+           </div>
+    
+    }
+    </div>
+
+  </div>
+  <div  class="clear-fix">
+      <div id="resultTable"  class="addStoreForm   portlet box  page-content content-wrapper clear-fix" style="display:none">
+      <div class="portlet box green">
+							<div class="portlet-title">
+								<div class="caption"><i class="icon-reorder"></i>Resultado</div>
+								<div class="tools">
+									<a href="javascript:;" class="collapse"></a>
+									<a href="#portlet-config" data-toggle="modal" class="config"></a>
+								</div>
+							</div>
+
+    <div class="portlet-body">
+    <table class="table table-bordered table-advanced">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>COMERCIO</th>
+                <th>BALANCE</th>
+                <th>TELEFONO</th>
+                <th>TIPO</th>
+                <th>CATEGORIA</th>
+                <th>STATUS</th>
+                <!--<th>DESCUENTO</th>-->
+                <th>CADENA</th>
+                <th>VENDEDOR</th>
+                <th>DISTRIBUIDOR</th>
+            </tr>
+        </thead>
+        <tbody>
+           @if (ViewBag.storeList != null)
+           {
+               foreach (var item in ViewBag.storeList)
+               {
+                <tr>
+                    <td>item.ID</td>
+                    <td>item.NAME</td>
+                    <td>item.BALANCE</td>
+                    <td>item.PHONE</td>
+                    <td>item.TERMINAL_TYPE</td>
+                    <td>item.MCATEGORY</td>
+                    <td>item.STATUS</td>
+                    <!--<td>item.</td>-->
+                    <td>item.CHAIN</td>
+                    <td>item.VENDOR</td>
+                    <td>item.DISTRIBUTOR</td>
+                </tr>
+               
+               }
+           }
+        </tbody>
+    </table>
+        </div>
+       </div>
+          </div>
+        </div>
+    <div id="addStoreForm" class="addStoreForm portlet box border-green page-content content-wrapper clear-fix" style="display:none">
+        <form id="addForm" method="post" action="/Store" >
+             <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption"><i class="icon-reorder"></i>Agregar Comercio</div>
+                <div class="number"></div>
+            </div>
+        <div class="portlet-body">
+           <div class="controls">
+           
+             <div class="form-group">
+                 <div class="row-fluid">
+          <div class="span4">
+              <div class="span12"></div>
+          <div class="span12">
+                             @Html.LabelFor(m => m.NAME, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.NAME, new { @class = "input-lg m-wrap span7 required", @name = "name" })
+            </div>
+           <div class="span12">
+                             @Html.LabelFor(m => m.STATUS, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.STATUS, new { @class = "input-lg m-wrap span7", @name = "description" })
+            </div>
+            <div class="span12">
+                             @Html.LabelFor(m => m.CELL, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.CELL, new { @class = "input-lg m-wrap span7 number",@maxlength="10",@minlength="10", @name = "cell" })
+            </div>
+           <div class="span12">
+                             @Html.LabelFor(m => m.PHONE, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.PHONE, new { @class = "input-lg m-wrap span7 number",@maxlength="10",@minlength="10", @name = "phone" })
+             </div>
+            <div class="span12">
+                             @Html.LabelFor(m => m.ADDRESS, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.ADDRESS, new { @class = "input-lg m-wrap span7 required", @name = "address" })
+              </div>
+              <div class="span12">
+                             @Html.LabelFor(m => m.ADDRESS2, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.ADDRESS2, new { @class = "input-lg m-wrap span7", @name = "address2" })
+             </div>
+              <div class="span12">
+                             @Html.LabelFor(m => m.COUNTRY, new { @class = "span5" })
+                             @Html.DropDownList("Countries", "Seleccione un Pais")
+              </div>
+              <div class="span12">
+                             @Html.LabelFor(m => m.CITY, new { @class = "span5" })
+                             @Html.DropDownList("Cities", "Seleccione una ciudad")
+              </div>
+              <div class="span12">
+                             @Html.LabelFor(m => m.EMAIL, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.EMAIL, new { @class = "input-lg m-wrap span7 required email", @name = "Email" })
+              </div> 
+              <div class="span12">
+                             @Html.LabelFor(m => m.DISTRIBUTOR, new { @class = "span5" })
+                              @Html.DropDownList("distributorList", "Seleccione un Distribuidor")
+              </div>
+              <div class="span12">
+                             @Html.LabelFor(m => m.VENDOR, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.VENDOR, new { @class = "input-lg m-wrap span7", @name = "vendor" })
+              </div>
+              <div class="span12">
+                             @Html.LabelFor(m => m.CHAIN, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.CHAIN, new { @class = "input-lg m-wrap span7", @name = "chain" })
+              </div>
+              <div class="span12">
+                             @Html.LabelFor(m => m.TERMINAL_TYPE, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.TERMINAL_TYPE, new { @class = "input-lg m-wrap span7", @name = "merchant" })
+              </div>
+              <div class="span12">
+                             @Html.LabelFor(m => m.CELL, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.CELL, new { @class = "input-lg m-wrap span7", @name = "discount" })
+              </div>
+              <div class="span12">
+                             @Html.Label("STATUS_ID", "MAX DIA", new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.STATUS_ID, new { @class = "input-lg m-wrap span7 number", @name = "discount" })
+              </div>
+              <div class="span12">
+                             @Html.Label("STATUS_ID", "MAX SEMANAL  ", new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.STATUS_ID, new { @class = "input-lg m-wrap span7 number", @name = "discount" })
+              </div>
+              <div class="span12">
+                              @Html.Label("STATUS_ID", "MAX MES  ", new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.STATUS_ID, new { @class = "input-lg m-wrap span7 number", @name = "discount" })
+              </div>
+              <div class="span12">
+                              @Html.Label("STATUS_ID", "USUARIO", new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.STATUS_ID, new { @class = "input-lg m-wrap span7 required", @name = "discount" })
+              </div>
+              <div class="span12">
+                              @Html.Label("PASSWORD", "PASSWORD", new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.PASSWORD, new { @class = "input-lg m-wrap span7 required", @name = "discount",@type="password" })
+              </div>
+               <div class="span12">
+                              @Html.Label("STATUS_ID", "NOMBRE", new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.STATUS_ID, new { @class = "input-lg m-wrap span7", @name = "discount" })
+              </div>
+              <div class="span12">
+                              @Html.Label("STATUS_ID", "MODELO POS", new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.STATUS_ID, new { @class = "input-lg m-wrap span7", @name = "discount" })
+              </div>
+              <div class="span12">
+                              @Html.Label("STATUS_ID", "SERIAL", new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.STATUS_ID, new { @class = "input-lg m-wrap span7", @name = "discount" })
+              </div>
+          </div>
+          <div class="span4">
+           <div class="span12"></div>
+               <div class="span12"></div>
+               <div class="span12"></div>
+              <div class="span12">
+                              @Html.LabelFor(m => m.RNC, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.RNC, new { @class = "input-lg m-wrap span7", @name = "rnc" })
+              </div>
+              <div class="span12">
+                              @Html.Label("STATUS_ID", "SERIAL", new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.STATUS_ID, new { @class = "input-lg m-wrap span7", @name = "discount" })
+              </div>
+               <div class="span12"></div>
+               <div class="span12"></div>
+               <div class="span12"></div>
+               <div class="span12"></div>
+              <div class="span12">
+                              @Html.Label("PHONE", "PROVINCIA", new { @class = "span5" })
+                              @Html.DropDownList("states", "Seleccione una Provincia")
+              </div>
+              <div class="span12">
+                              @Html.Label("PHONE", "SECTOR", new { @class = "span5" })
+                              @Html.DropDownList("sectors", "Seleccione una SECTOR")
+              </div>
+               <div class="span12"></div>
+               <div class="span12"></div>
+               <div class="span12"></div>
+               <div class="span12"></div>
+               <div class="span12">
+                              @Html.Label("PHONE", "CATEGORIA", new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.PHONE, new { @class = "input-lg m-wrap span7", @name = "state" })
+              </div>
+              <div class="span12">
+                              @Html.Label("PHONE", "COD FACT", new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.PHONE, new { @class = "input-lg m-wrap span7", @name = "CODFACT" })
+              </div>
+              <div class="span12">
+                              @Html.Label("PHONE", "MIN BALANCE", new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.PHONE, new { @class = "input-lg m-wrap span7", @name = "MINBALANCE" })
+              </div>
+               <div class="span12"></div>
+               <div class="span12"></div>
+               <div class="span12"></div>
+               <div class="span12"></div>
+               <div class="span12">
+                              @Html.Label("PHONE", "PIN", new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.PHONE, new { @class = "input-lg m-wrap span7", @name = "PIN" })
+              </div>
+               <div class="span12">
+                              @Html.Label("PHONE", "APELLIDO", new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.NAME, new { @class = "input-lg m-wrap span7", @name = "APELLIDO" })
+              </div>
+              <div class="span12">
+                              @Html.Label("PHONE", "KEY", new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.NAME, new { @class = "input-lg m-wrap span7", @name = "KEY" })
+              </div>
+          </div>
+                     <div class="span12">
+                         
+                    <a class="span2 btn green"  id="saveButton" style="padding:0px !important">Guardar</a>
+                    <a class="span2 btn red"   id="cancelButton" style="padding:0px !important">cancelar</a>
+                     </div>
+           </div>
+                </div>
+               </div>
+            </div>
+                 </div>
+        </form>
+
+
+    </div>
+   <div id="ResultPage"  class="addStoreForm   portlet box  page-content content-wrapper clear-fix" style="display:none">
+      <div class="portlet box green">
+							<div class="portlet-title">
+								<div class="caption"><i class="icon-reorder"></i>Resultado</div>
+								<div class="tools">
+									<a href="javascript:;" class="collapse"></a>
+									<a href="#portlet-config" data-toggle="modal" class="config"></a>
+								</div>
+							</div>
+
+          <div class="portlet-body">
+               <div class="caption">
+                   <label id="lvlReslt"></label>
+                  <a class="btn green" style="font-size:10px" id="ok">Aceptar</a>
+               </div>
+              <div> 
+                    </div>
+          </div>
+       </div>
+    </div>
+ <div id="editStoreForm" class="addStoreForm portlet box border-green page-content content-wrapper clear-fix" style="display:inline">
+        <form id="editForm" method="post" action="/Store" >
+             <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption"><i class="icon-reorder"></i>Editar Comercio</div>
+                <div class="number"></div>
+            </div>
+        <div class="portlet-body">
+           <div class="controls">
+           
+             <div class="form-group">
+                 <div class="row-fluid">
+          <div class="span4">
+              <div class="span12"></div>
+          <div class="span12">
+                             @Html.LabelFor(m => m.NAME, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.NAME, new { @class = "input-lg m-wrap span7 required", @name = "name" })
+            </div>
+           <div class="span12">
+                             @Html.LabelFor(m => m.STATUS, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.STATUS, new { @class = "input-lg m-wrap span7", @name = "description" })
+            </div>
+            <div class="span12">
+                             @Html.LabelFor(m => m.CELL, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.CELL, new { @class = "input-lg m-wrap span7 number",@maxlength="10",@minlength="10", @name = "cell" })
+            </div>
+           <div class="span12">
+                             @Html.LabelFor(m => m.PHONE, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.PHONE, new { @class = "input-lg m-wrap span7 number",@maxlength="10",@minlength="10", @name = "phone" })
+             </div>
+            <div class="span12">
+                             @Html.LabelFor(m => m.ADDRESS, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.ADDRESS, new { @class = "input-lg m-wrap span7 required", @name = "address" })
+              </div>
+              <div class="span12">
+                             @Html.LabelFor(m => m.ADDRESS2, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.ADDRESS2, new { @class = "input-lg m-wrap span7", @name = "address2" })
+             </div>
+              <div class="span12">
+                             @Html.LabelFor(m => m.COUNTRY, new { @class = "span5" })
+                             @Html.DropDownList("Countries", "Seleccione un Pais")
+              </div>
+              <div class="span12">
+                             @Html.LabelFor(m => m.CITY, new { @class = "span5" })
+                             @Html.DropDownList("Cities", "Seleccione una ciudad")
+              </div>
+              <div class="span12">
+                             @Html.LabelFor(m => m.EMAIL, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.EMAIL, new { @class = "input-lg m-wrap span7 required email", @name = "Email" })
+              </div> 
+              <div class="span12">
+                             @Html.LabelFor(m => m.DISTRIBUTOR, new { @class = "span5" })
+                              @Html.DropDownList("distributorList", "Seleccione un Distribuidor")
+              </div>
+              <div class="span12">
+                             @Html.LabelFor(m => m.VENDOR, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.VENDOR, new { @class = "input-lg m-wrap span7", @name = "vendor" })
+              </div>
+              <div class="span12">
+                             @Html.LabelFor(m => m.CHAIN, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.CHAIN, new { @class = "input-lg m-wrap span7", @name = "chain" })
+              </div>
+              <div class="span12">
+                             @Html.LabelFor(m => m.TERMINAL_TYPE, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.TERMINAL_TYPE, new { @class = "input-lg m-wrap span7", @name = "merchant" })
+              </div>
+              <div class="span12">
+                             @Html.LabelFor(m => m.CELL, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.CELL, new { @class = "input-lg m-wrap span7", @name = "discount" })
+              </div>
+              <div class="span12">
+                             @Html.Label("STATUS_ID", "MAX DIA", new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.STATUS_ID, new { @class = "input-lg m-wrap span7 number", @name = "discount" })
+              </div>
+              <div class="span12">
+                             @Html.Label("STATUS_ID", "MAX SEMANAL  ", new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.STATUS_ID, new { @class = "input-lg m-wrap span7 number", @name = "discount" })
+              </div>
+              <div class="span12">
+                              @Html.Label("STATUS_ID", "MAX MES  ", new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.STATUS_ID, new { @class = "input-lg m-wrap span7 number", @name = "discount" })
+              </div>
+             
+              
+          </div>
+          <div class="span4">
+           <div class="span12"></div>
+               <div class="span12"></div>
+               <div class="span12"></div>
+              <div class="span12">
+                              @Html.LabelFor(m => m.RNC, new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.RNC, new { @class = "input-lg m-wrap span7", @name = "rnc" })
+              </div>
+              <div class="span12">
+                              @Html.Label("STATUS_ID", "SERIAL", new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.STATUS_ID, new { @class = "input-lg m-wrap span7", @name = "discount" })
+              </div>
+               <div class="span12"></div>
+               <div class="span12"></div>
+               <div class="span12"></div>
+               <div class="span12"></div>
+              <div class="span12">
+                              @Html.Label("PHONE", "PROVINCIA", new { @class = "span5" })
+                              @Html.DropDownList("states", "Seleccione una Provincia")
+              </div>
+              <div class="span12">
+                              @Html.Label("PHONE", "SECTOR", new { @class = "span5" })
+                              @Html.DropDownList("sectors", "Seleccione una SECTOR")
+              </div>
+               <div class="span12"></div>
+               <div class="span12"></div>
+               <div class="span12"></div>
+               <div class="span12"></div>
+               <div class="span12">
+                              @Html.Label("PHONE", "CATEGORIA", new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.PHONE, new { @class = "input-lg m-wrap span7", @name = "state" })
+              </div>
+              <div class="span12">
+                              @Html.Label("PHONE", "COD FACT", new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.PHONE, new { @class = "input-lg m-wrap span7", @name = "CODFACT" })
+              </div>
+              <div class="span12">
+                              @Html.Label("PHONE", "MIN BALANCE", new { @class = "span5" })
+                             @Html.TextBoxFor(m => m.PHONE, new { @class = "input-lg m-wrap span7", @name = "MINBALANCE" })
+              </div>
+               <div class="span12"></div>
+               <div class="span12"></div>
+               <div class="span12"></div>
+               <div class="span12"></div>
+              
+          </div>
+                     <div class="span12">
+                         
+                    <a class="span2 btn green"  id="saveEditButton" style="padding:0px !important">Guardar</a>
+                    <a class="span2 btn red"   id="cancelEditButton" style="padding:0px !important">cancelar</a>
+                     </div>
+           </div>
+                </div>
+               </div>
+            </div>
+                 </div>
+        </form>
+
+
+    </div>
+<script>
+    jQuery(document).ready(function () {
+        // initiate layout and plugins
+        App.init();
+        TableAdvanced.init();
+    });
+	</script>
+   <script>
+       jQuery(document).ready(function () {
+           $('.date').datepicker();
+           $('#table').sortable();
+       });
+	</script>
+
+
+ 
+
+

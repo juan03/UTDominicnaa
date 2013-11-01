@@ -1,0 +1,172 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    WebGrid grid = new WebGrid(Model);
+}
+@model List<UTDOMINICANA.Models.TransaccionModel>
+<script src="~/Scripts/jquery-ui-1.8.20.js"></script>
+<script src="~/Scripts/jquery-1.7.1.js"></script>
+<link href="~/css/datepicker.css")" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.7.1.min.js"></script>
+<script src="~/js/bootstrap-datepicker.js"></script>
+<link href="assets/css/bootstrap.min.css")" rel="stylesheet" />
+		<link rel="stylesheet" href="assets/css/font-awesome.min.css")" />
+ 
+    <div  class="portlet box red page-content content-wrapper clear-fix" >
+        <div class="tittle" style="background-color:rgba(53,170,71,0.8);border:1px;border-radius:20px !important;padding:10px 10px 10px 10px;margin-bottom:10px">
+           
+							<div class="tile bg-green">
+						
+                                
+						<div class="tile-object">
+							<div class="name" style="font-weight:bold;font-size:22px">
+								<i class="icon-bar-chart big"></i>&nbsp;Reporte de Transacciones
+							</div>
+							<div class="number"></div>
+						</div>
+					</div>
+				
+
+        </div>
+  @using (Html.BeginForm("Index", "TransactionsReport", FormMethod.Get, new { @role = "form", @class = "form", @style = "background-color:rgba(255,255,255,1);border:1px;border-radius:20px !important;padding:10px 10px 10px 10px" }))
+  { 
+    
+          <div class="controls">
+          <div class="form-group">
+          <label for="startDate">Desde</label>
+          <input class="form-control input-lg date" name="START" type="text" id="startDate" placeholder="Fecha"/></div>
+           <div class="form-group">    
+          <label for="endDate">Hasta</label>
+          <input class="form-control input-lg date" name="END" type="text" id="endDate" placeholder="Fecha" /></div>
+            <div class="form-group">
+            <label for="Producto" >Producto</label>
+             <select class="form-control" id="Producto" name="productID">
+                 <option value="0">Todos</option>
+             </select>
+           </div>
+              <div class="form-group">
+            <label for="tipoProducto" >Tipo de producto</label>
+             <select class="form-control" id="tipoProducto" name="type">
+                 <option value="0">Todos</option>
+             </select>
+
+           </div>
+               <div class="form-group">
+          <label for="startDate">Telefono/pin</label>
+          <input class="form-control input-lg" name="phone_pin" type="text" id="telefonopin"/></div>
+              <div class="form-group">
+          <label for="startDate">Respuesta</label>
+          <input class="form-control input-lg" name="response" type="text" id="respuesta" value="" /></div>
+              <div class="form-group">
+          <label for="startDate">Autentificacion</label>
+          <input class="form-control input-lg" value="" name="auth_number" type="text" id="Aprovacion" /></div>
+<!---
+              <div class="form-group">
+            <label for="Proveedor" >Vendedores</label>
+             <select class="form-control" id="Vendedr" name="Proveedor">
+                 <option value="0">Todos</option>
+             </select></div>
+
+                 <div class="form-group">
+          <label for="comboTienda">Comercios</label>
+          <select class="form-control" name="TIENDA" id="comboTienda">
+              <option value="0" title="Todos">Todos</option></select></div>
+                  <div class="form-group">
+          <label for="comboCadenas">Cadenas</label>
+          <select class="form-control" name="Cadena" id="comboCadena">
+              <option value="0" title="Todos">Todos</option></select></div>
+             -->
+
+          
+               <div class="form-group">
+           <button type="submit" class="btn blue">Buscar<i style="margin-left: 3px" class="icon-search white"></i></button></div>
+              </div>
+                 
+    }
+        <div style="background-color:rgba(53,170,71,0.8);border:1px;border-radius:20px !important;padding:10px 10px 10px 10px;margin-bottom:10px">
+
+            <div class="row-fluid">
+									<button class="btn ">Excel
+										<i class=" icon-download-alt big"></i>
+										
+									
+									</button>
+									<button class="btn">Imprimir
+										<i class="icon-print big"></i>
+										
+									
+									</button>
+									
+								</div>
+
+        </div>
+        
+
+ <div id="tableContainer" class="table-responsive" style="background-color:rgba(255,255,255,1);border:1px;border-radius:20px !important;padding:10px 10px 10px 10px" >
+
+  <div id="tablaReportes" class="table table-bordered table-hover table-advanced" style="overflow:scroll">
+    <!--- Tabla Reportes en caso general -->
+     <table class="table table-bordered table-condensed table-advanced">
+        
+         <thead>
+             <tr style="white-space:nowrap"> 
+                  <th>Fecha</th>
+                  <th>Tipo Producto</th>
+                  <th>Producto</th>
+                  <th>Fuente</th>
+                  <th>Monto/Balance</th>
+                  <th>Autorizacion
+                  </th>
+                  <th>Monto</th>
+                  <th>Descripcion</th>
+            
+             </tr>
+         </thead>
+         <tbody>
+             @foreach(var item in Model)
+             {
+                 <tr style="white-space:nowrap">
+                     <td>@item.DATE</td>
+                     <td>@item.TYPE</td>
+                     <td>@item.PRODUCT</td>
+                     <td>@item.SOURCE</td>
+                     <td>@item.Monto_Balance</td>
+                     <td>@item.AUTH_NUMBER</td>
+                     <td>@item.AMOUNT</td>
+                     <td>@item.Description</td>
+                </tr>
+                 
+             }
+         </tbody>
+         
+        
+     </table>
+       
+    
+  </div>
+ 
+</div>
+         </div> 
+        
+    
+    <script type="text/javascript">
+        $('.date').datepicker();
+        $("#ajax-progress-dialog").dialog({
+            autoOpen: false,
+            draggable: false,
+            modal: true,
+            height: 80,
+            resizable: false,
+            title: "Processing, please wait...",
+            closeOnEscape: false,
+            open: function () { $(".ui-dialog-titlebar-close").hide(); } // Hide close button
+
+        });
+
+      
+       
+   
+</script>
+   
+
+

@@ -1,0 +1,322 @@
+﻿@model List<UTDOMINICANA.Models.User>
+@using UTDOMINICANA.Content;
+
+@{
+    
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+
+}
+@{
+    
+    var atribute = "atribute";
+}
+<link href="Styles/Interno.css")" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="~/Scripts/maskedinput.js"></script>  <script src="~/Scripts/spin.js"></script>
+<!-- BEGIN GLOBAL MANDATORY STYLES -->
+	<script type="text/javascript">
+	    $(document).ready(function () {
+	        // initiate layout and plugins
+	        $('.btnEdit').click(function () {
+	            document.getElementById("usuario").value = "Username";
+	            
+	            var value = (this).getAttribute("data-id");
+	            $.post("@Url.Action("getSomeInfo","User")", { id: value }, function (data) {
+	                document.getElementById("nombremodal").value = data.nombre;
+	                document.getElementById("apellidomodal").value = data.apellido; 
+	                document.getElementById("emailmodal").value = data.Email;
+	                document.getElementById("telefono").value = 8095325225;
+	                document.getElementById("perfil").value = data.Entity;
+	                document.getElementById("idioma").value = "espanol";
+	                document.getElementById("estatusmodal").value = data.Estatus;
+	            });
+               
+
+	            
+	            var brand = $('#btnEdit').attr("data-id").value; 
+	            alert("this is the id:"+value2);
+	            alert("passed throw" + atribute);
+	        });
+	        
+		
+		   function openModal() {
+		       $('#editModal').fadeIn(400);
+		       $('.modal-scrollable').fadeIn(400);  
+		   }
+		   function closeModal() {
+		       $('#editModal').fadeOut(400);
+		   }
+		  
+		});
+	</script>
+<div class="portlet box red page-content content-wrapper clear-fix">
+    <div class="tittle" style="background-color: rgba(53,170,71,0.8); border: 1px; border-radius: 20px !important; padding: 10px 10px 10px 10px; margin-bottom: 10px">
+
+        <div class="tile bg-green">
+            
+
+            <div class="tile-object">
+                <div class="name" style="font-weight: bold; font-size: 22px">
+                    <h5><i class="icon-user big">&nbsp;</i>Administracion de usuarios</h5>
+                </div>
+                <div class="number"></div>
+            </div>
+        </div>
+
+
+    </div>
+    @using (Html.BeginForm("Index", "PaymentReports", FormMethod.Get, new { @role = "form", @class = "form", @style = "background-color:rgba(255,255,255,1);border:1px;border-radius:20px !important;padding:10px 10px 10px 10px" }))
+    {
+
+        <div class="controls">
+            <div class="form-group">
+                <label for="id">ID</label>
+                <input class="form-control input-lg" name="id" type="text" id="id" />
+            </div>
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input class="form-control input-lg" name="nombre" type="text" id="nombre" />
+            </div>
+            <div class="form-group">
+                <label for="nombre">Apellido</label>
+                <input class="form-control input-lg" name="apellido" type="text" id="apellido" />
+            </div>
+            <div class="form-group">
+                <label for="nombre">Email</label>
+                <input class="form-control input-lg" name="email" type="text" id="email" />
+
+            </div>
+            <div class="form-group ui-widget">
+                <label for="entidad">Entidad</label>
+                <select class="form-control" name="entidad" id="entidad">
+                    <option value="0" title="Todos">Todos</option>
+                </select>
+            </div>
+            <div class="form-group ui-widget">
+                <label for="tipoEntidad">Tipo de Entidad</label>
+                <select class="form-control" name="tipoEntidad" id="tipoEntidad">
+                    <option value="0" title="Todos">Entidad</option>
+                </select>
+            </div>
+            <div class="form-group ui-widget">
+                <label for="estatus">Estado</label>
+                <select class="form-control" name="estatus" id="estatus">
+                    <option value="0" title="Todos">Entidad</option>
+                </select>
+            </div>
+            <div class="form-group ui-widget">
+
+                <button type="submit" class="btn blue">
+                    Buscar<i style="margin-left: 3px" class="icon-search white"></i>
+                </button>
+            </div>
+        </div>
+ }
+     <div style="background-color:rgba(53,170,71,0.8);border:1px;border-radius:20px !important;padding:10px 10px 10px 10px;margin-bottom:10px">
+
+            <div class="row-fluid">
+									<button class="btn purple span3">Excel
+										<i class=" icon-download-alt big"></i>
+										
+									
+									</button>
+									<button class="btn blue span3" onclick=" PrintElem(table)">Imprimir
+										<i class="icon-print big"></i>
+										
+									
+									</button>
+                                    <a class="btn yellow span3" href="#responsive2" data-toggle="modal">Usuario
+										<i class="icon-plus-sign big"></i>
+									
+									</a>
+									
+			</div>
+
+        </div>
+
+    <div class="table-responsive" style="background-color: rgba(255,255,255,1); border: 1px; border-radius: 20px !important; padding: 10px 10px 10px 10px">
+        <div class="content-wrapper">
+            <table id="mytable" class="table table-bordered table-advanced">
+                <thead>
+                    <tr>
+                        <th>Opcion</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Tipo Entidad</th>
+                        <th>Nombre Entidad</th>
+                        <th>Email</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var key in Model)
+                        {
+                        <tr id="@key.id">
+                            <td><a type="button" class="btnEdit btn blue" id="btnEdit"  data-toggle="modal" href="#responsive" data-id="@key.id" style="text-decoration:none"><i class="icon-edit big">&nbsp;</i>Editar</a></td>
+                            <td id="rowId" hidden="hidden"></td>
+                            <td>@key.nombre</td>
+                            <td>@key.apellido</td>
+                            <td>@key.EntityType</td>
+                            <td>@key.Entity</td>
+                            <td>@key.Email</td>
+                            <td>@key.Estatus</td>
+                        </tr>
+                 }
+                    }
+                </tbody>
+
+
+
+            </table>
+
+        </div>
+    </div>
+    <div class="modal-scrollable" style="z-index: 10050;">
+        <div id="responsive" class="modal hide fade" tabindex="-1" data-focus-on="input:first" style="display: none;" aria-hidden="false">
+            <div class="modal-header" style="background-color:rgba(126,150,66,0.4)">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3>Editar Usuario&nbsp;<i class="icon-edit"></i></h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="row-fluid">
+                    <div class="span6">
+                        <label for="usuario">Usuario</label>
+                            <input type="text" id="usuario" name="usuario" class=" m-wrap span12"/>
+                        
+                    </div>
+                    <div class="span6" >
+                        <label for="clave">Clave</label>
+                            <input type="text" id="clave" name="clave" class=" m-wrap span12" />
+                   
+                    </div>
+                    
+                    <div class="span6" style="margin-left:0px;">
+                        <label for="nombremodal">Nombre</label>
+                        <input type="text" id="nombremodal" name="nombre" class="m-wrap span12" />
+
+
+                    </div>
+                    <div class="span6">
+                        <label for="apellidomodal">Apellido</label>
+                            <input  type="text"  id="apellidomodal" name="appelido" class="m-wrap span12"/>
+                      
+                    </div>
+                    <div class="span6" style="margin-left:0px;">
+                        <label for="emailmodal">Email</label>
+                            <input id="emailmodal" name="email" type="text" class="form-control input-lg m-wrap span12" />
+                    
+                    </div>
+                    <div class="span6">
+                        <label for="telefono">Telefono</label>
+                            <input id="telefono" name="telefono" type="text" class="form-control input-lg m-wrap span12 " />
+                        
+                    </div>
+                    <div class="span6" style="margin-left:0px;">
+                        <label for="perfil">Perfil</label>
+                            <input id="perfil" name="perfil" type="text" class="form-control input-lg m-wrap span12 span12" />
+                       
+                    </div>
+
+                    <div class="span6">
+                        <label for="idioma">Idioma</label>
+                            <input id="idioma" name="idioma" type="text" class="form-control input-lg m-wrap span12" />
+                        
+                    </div>
+                    <div class="span6" style="margin-left:0px;">
+                        <label for="estatusmodal">Estatus</label><p>
+                            <input id="estatusmodal" name="estatus" type="text" class="form-control input-lg m-wrap span12" />
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" data-dismiss="modal" class="btn">Cerrar</button>
+                <button type="button" class="btn blue">Guardar</button>
+            </div>
+        </div>
+</div>
+
+    <div class="modal-scrollable" style="z-index: 10050;">
+        <div id="responsive2" class="modal hide fade" tabindex="-1" data-focus-on="input:first" style="display: none;" aria-hidden="false">
+            <div class="modal-header" style="background-color:rgba(126,150,66,0.4)">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3>Agregar Usuario&nbsp;<i class="icon-edit"></i></h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="row-fluid">
+                    <div class="span6">
+                        <label for="usuario">Usuario</label>
+                            <input type="text" id="usuario2" name="usuario" class=" m-wrap span12"/>
+                        
+                    </div>
+                    <div class="span6" >
+                        <label for="clave">Clave</label>
+                            <input type="text" id="clave2" name="clave" class=" m-wrap span12" />
+                   
+                    </div>
+                    
+                    <div class="span6" style="margin-left:0px;">
+                        <label for="nombremodal">Nombre</label>
+                        <input type="text" id="nombremodal2" name="nombre" class="m-wrap span12" />
+
+
+                    </div>
+                    <div class="span6">
+                        <label for="apellidomodal">Apellido</label>
+                            <input  type="text"  id="apellidomodal2" name="appelido" class="m-wrap span12"/>
+                      
+                    </div>
+                    <div class="span6" style="margin-left:0px;">
+                        <label for="emailmodal">Email</label>
+                            <input id="emailmodal2" name="email" type="text" class="form-control input-lg m-wrap span12" />
+                    
+                    </div>
+                    <div class="span6">
+                        <label for="telefono">Telefono</label>
+                            <input id="telefono2" name="telefono" type="text" class="form-control input-lg m-wrap span12 " />
+                        
+                    </div>
+                    <div class="span6" style="margin-left:0px;">
+                        <label for="perfil">Perfil</label>
+                            <input id="perfil2" name="perfil" type="text" class="form-control input-lg m-wrap span12 span12" />
+                       
+                    </div>
+
+                    <div class="span6">
+                        <label for="idioma">Idioma</label>
+                            <input id="idioma2" name="idioma" type="text" class="form-control input-lg m-wrap span12" />
+                        
+                    </div>
+                    <div class="span6" style="margin-left:0px;">
+                        <label for="estatusmodal">Estatus</label><p>
+                            <input id="estatusmodal2" name="estatus" type="text" class="form-control input-lg m-wrap span12" />
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" data-dismiss="modal" class="btn">Cerrar</button>
+                <button type="button" class="btn blue">Guardar</button>
+            </div>
+        </div>
+</div>
+
+    
+   
+   
+ 
+</div>
+
+
+ 
+

@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    WebGrid grid = new WebGrid(Model);
+}
+@model List<UTDOMINICANA.Models.Productos>
+<script src="~/Scripts/jquery-ui-1.8.20.js"></script>
+<script src="~/Scripts/jquery-1.7.1.js"></script>
+<link href="~/css/datepicker.css")" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.7.1.min.js"></script>
+<script src="~/js/bootstrap-datepicker.js"></script>
+<link href="assets/css/bootstrap.min.css")" rel="stylesheet" />
+		<link rel="stylesheet" href="assets/css/font-awesome.min.css")" />
+ 
+    <div  class="portlet box red page-content content-wrapper clear-fix" >
+        <div class="tittle" style="background-color:rgba(53,170,71,0.8);border:1px;border-radius:20px !important;padding:10px 10px 10px 10px;margin-bottom:10px">
+           
+							<div class="tile bg-green">
+						
+                                
+						<div class="tile-object">
+							<div class="name" style="font-weight:bold;font-size:22px">
+								<i class="icon-bar-chart big"></i>&nbsp;Reporte de Productos
+							</div>
+							<div class="number"></div>
+						</div>
+					</div>
+				
+
+        </div>
+ 
+        <div style="background-color:rgba(53,170,71,0.8);border:1px;border-radius:20px !important;padding:10px 10px 10px 10px;margin-bottom:10px">
+
+            <div class="row-fluid">
+									<button class="btn ">Excel
+										<i class=" icon-download-alt big"></i>
+										
+									
+									</button>
+									<button class="btn">Imprimir
+										<i class="icon-print big"></i>
+										
+									
+									</button>
+									
+								</div>
+
+        </div>
+        
+
+ <div id="tableContainer" class="table-responsive" style="background-color:rgba(255,255,255,1);border:1px;border-radius:20px !important;padding:10px 10px 10px 10px" >
+
+  <div id="tablaReportes" class="table table-bordered table-hover table-advanced" style="overflow:scroll">
+    <!--- Tabla Reportes en caso general -->
+     <table class="table table-bordered table-condensed table-advanced">
+        
+         <thead>
+             <tr style="white-space:nowrap"> 
+                  <th>Producto</th>
+                  <th>Valor minimo</th>
+                  <th>Valor Maximo</th>
+                  <th>Tipo</th>
+                  <th>Proveedor</th>
+                  <th>Descuento
+                  </th>
+                  <th>Estado</th>
+                  
+            
+             </tr>
+         </thead>
+         <tbody>
+             @foreach(var item in Model)
+             {
+                 <tr style="white-space:nowrap">
+                     <td>@item.PRODUCT_DESCRIPTION</td>
+                     <td>@item.MIN_VALUE</td>
+                     <td>@item.MAX_VALUE</td>
+                     <td>@item.PRODUCT_TYPE</td>
+                     <td>@item.PROVIDER</td>
+                     <td>@item.COMMISSION_MERCHANT</td>
+                     <td>@item.STATUS</td>
+                     
+                </tr>
+                 
+             }
+         </tbody>
+         
+        
+     </table>
+       
+    
+  </div>
+ 
+</div>
+         </div> 
+        
+    
+    <script type="text/javascript">
+        $('.date').datepicker();
+        $("#ajax-progress-dialog").dialog({
+            autoOpen: false,
+            draggable: false,
+            modal: true,
+            height: 80,
+            resizable: false,
+            title: "Processing, please wait...",
+            closeOnEscape: false,
+            open: function () { $(".ui-dialog-titlebar-close").hide(); } // Hide close button
+
+        });
+
+      
+       
+   
+</script>
+   
+
+

@@ -1,0 +1,279 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    WebGrid grid = new WebGrid(Model);
+ }
+@model List<UTDOMINICANA.Models.Chains>
+<script src="~/Scripts/jquery-ui-1.8.20.js"></script>
+<script src="~/Scripts/jquery-1.7.1.js"></script>
+<link href="~/css/datepicker.css")" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.7.1.min.js"></script>
+ <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="~/js/bootstrap-datepicker.js"></script>
+<link href="assets/css/bootstrap.min.css")" rel="stylesheet" />
+		<link rel="stylesheet" href="assets/css/font-awesome.min.css")" />
+ <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css")" />
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<link rel="stylesheet" href="/resources/demos/style.css")" />
+<script type="text/javascript">
+    function printDiv(divID) {
+        var divElements = document.getElementById(divID).innerHTML
+        var oldPage = document.body.innerHTML;
+        document.body.innerHTML = "<html><head><title></title></head><body>" + divElements + "</body>";
+        window.print();
+        document.body.innerHTML = oldPage;
+        return false;
+    }
+
+</script>
+<div class="portlet box red page-content content-wrapper clear-fix">
+    <div class="tittle" style="background-color: rgba(53,170,71,0.8); border: 1px; border-radius: 20px !important; padding: 10px 10px 10px 10px; margin-bottom: 10px">
+
+        <div class="tile bg-green">
+
+
+            <div class="tile-object">
+                <div class="name" style="font-weight: bold; font-size: 22px">
+                    <h5><i class="icon-bar-chart"></i>&nbsp;Cadenas</h5>
+                </div>
+                <div class="number"></div>
+            </div>
+        </div>
+
+
+    </div>
+    @using (Html.BeginForm("Index", "PaymentReports", FormMethod.Get, new { @role = "form", @class = "form", @style = "background-color:rgba(255,255,255,1);border:1px;border-radius:20px !important;padding:10px 10px 10px 10px" }))
+    { 
+    
+        <div class="row-fluid">
+            <div class="form-group span12">
+                </div>
+            <div class="form-group span5">
+                <label for="Grupo">Grupo</label>
+                <input class="span12 m-wrap input-lg" name="Grupo" type="text" id="Grupo" />
+            </div>
+
+            <div class="form-group ui-widget span5">
+                <label for="status">Estatus</label>
+                <select class="span12 m-wrap input-lg" name="status" id="status">
+                    <option value="0" title="Todos">Todos</option>
+                </select>
+            </div>
+            <div class="form-group span12"></div>
+            <div class="form-group span12">
+                <button type="submit" class="btn blue span6">Buscar<i style="margin-left: 3px" class="icon-search white"></i></button>
+            </div>
+          
+        </div>
+  }
+    <div style="background-color: rgba(53,170,71,0.8); border: 1px; border-radius: 20px !important; padding: 10px 10px 10px 10px; margin-bottom: 10px">
+
+        <div class="row-fluid">
+            <button class="btn green span3">
+                Excel
+										<i class=" icon-download-alt white big"></i>
+            </button>
+            <button class="btn blue border span3" onclick="return printDiv('tablaReportes');">
+                Imprimir
+										<i class="icon-print white big "></i>
+            </button>
+            <a style="text-decoration: none" class="btn yellow span3" data-toggle="modal" href="#responsive" onclick=" PrintElem(table)">Adicionar Vendedor<i class=" icon-plus-sign big"></i>
+            </a>
+
+        </div>
+
+    </div>
+
+    <div id="tableContainer" class="table-responsive" style="background-color: rgba(255,255,255,1); border: 1px; border-radius: 20px !important; padding: 10px 10px 10px 10px">
+
+        <div id="tablaReportes" class="table-responsive" style="overflow: scroll">
+            <table id="table" class="table table-bordered table-condensed table-advanced">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Phone</th>
+                        <th>rnc</th>
+                        <th>Grupo id</th>
+                        <th>Vendedor</th>
+                        <th>Direccion</th>
+                        <th>contact</th>
+                        <th>Usuario</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                        <tr>
+                            <td class="noPrint">@item.name</td>
+                            <td>@item.phone</td>
+                            <td>@item.rnc</td>
+                            <td>@item.idGroup</td>
+                            <td>@item.vendor</td>
+                            <td>@item.adress</td>
+                            <td>@item.contact</td>
+                            <td>@item.city</td>
+                        </tr>
+                 
+             }
+                    }
+                </tbody>
+            </table>
+
+
+        </div>
+
+    </div>
+
+    <!-- modal extender --->
+    <div class="modal-scrollable" style="z-index: 10050;">
+        <div id="responsive" class="modal hide fade" tabindex="-1" data-focus-on="input:first" style="display: none;" aria-hidden="false">
+            <div class="modal-header" style="background-color: rgba(126,150,66,0.4)">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3>Adicionar Cadena&nbsp;<i class="icon-edit"></i></h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="tabbable">
+                    <ul class="nav nav-tabs padding-12 tab-color-blue background-blue" id="myTab4">
+                        <li class="">
+                            <a data-toggle="tab" href="#home4">Informacion Cadena</a>
+                        </li>
+
+                        <li class="">
+                            <a data-toggle="tab" href="#profile4">Tiendas</a>
+                        </li>
+
+                        <li class="">
+                            <a data-toggle="tab" href="#dropdown14">Balance</a>
+                        </li>
+                        <li class="">
+                            <a data-toggle="tab" href="#dropdown15">Comision</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="home4" class="tab-pane">
+                            <div class="row-fluid">
+                                <div class="controls">
+                                    <div class="form-group span6">
+                                        <label for="idGrupo">id Grupo</label>
+                                        <input class="form-control input-lg span12" name="idGrupo" type="text" id="idGrupo" data-tabindex="1" />
+                                    </div>
+                                    <div class="form-group span6">
+                                        <label for="descripcion">Descripcion</label>
+                                        <input class="form-control input-lg span12" name="descripcion" type="text" id="descripcion" data-tabindex="2" />
+                                    </div>
+
+                                    <div class="form-group span6" style="margin-left: 0px;">
+                                        <label for="nombre">Nombre</label>
+                                        <input class="form-control input-lg span12" name="nombre" type="text" id="nombre" data-tabindex="2" />
+                                    </div>
+                                    <div class="form-group span6">
+                                        <label for="contacto">Contacto</label>
+                                        <input class="form-control input-lg  span12" name="contacto" type="text" id="contacto" />
+                                    </div>
+                                    <div class="form-group span6" style="margin-left: 0px;">
+                                        <label for="email">Email</label>
+                                        <input class="form-control input-lg span12 " name="email" type="text" id="email" />
+                                    </div>
+                                    <div class="form-group span6">
+                                        <label for="telefono">Telefono</label>
+                                        <input class="form-control input-lg span12" name="telefono" type="tel" id="telefono" />
+                                    </div>
+                                    <div class="form-group span6" style="margin-left: 0px;">
+                                        <label for="direccion">Direccion</label>
+                                        <input class="form-control input-lg span12" name="direccion" type="text" id="direccion" />
+                                    </div>
+                                    <div class="form-group span6">
+                                        <label for="pais">Pais</label>
+                                        <input class="form-control input-lg span12" name="pais" type="text" id="pais" />
+                                    </div>
+                                    <div class="form-group span6" style="margin-left: 0px;">
+                                        <label for="ciudas">Ciudad</label>
+                                        <input class="form-control input-lg span12" name="pais" type="text" id="ciudas" />
+                                    </div>
+                                    <div class="form-group span6">
+                                        <label for="rnc">Rnc</label>
+                                        <input class="form-control input-lg span12" name="rnc" type="text" id="rnc" />
+                                    </div>
+                                    <div class="form-group span6" style="margin-left: 0px;">
+                                        <label for="combovendor">Vendedor</label>
+                                        <select class="form-control input-lg span12" name="combovendor" id="combovendor" required data-tabindex="1">
+                                            <option value="0" title="Todos">Todos</option>
+                                        </select>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="profile4" class="tab-pane">
+
+                            <div class="form-group">
+                                <div class="row-fluid">
+                                    <div class="span6">
+                                        <label for="comboTienda">Tienda</label>
+                                        <select class="form-control input-lg span12" name="comboTienda" id="comboTienda" required data-tabindex="1">
+                                            <option value="0" title="Todos">Todos</option>
+                                        </select>
+                                    </div>
+                                    <div class="span6" style="margin-top: 24px; max-height: 30px">
+                                        <button id="btn" class="btn span6">Agregar&nbsp;<i class="icon-plus-sign"></i></button>
+                                    </div>
+                                </div>
+                                <div class="content-wrapper clear-fix">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Nombre</th>
+                                                <th>Disponible</th>
+                                                <th>balance</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>marvin</td>
+                                                <td>si</td>
+                                                <td>120000</td>
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="dropdown14" class="tab-pane active">
+                            <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade.</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" data-dismiss="modal" class="btn">Cerrar</button>
+                <button type="button" class="btn blue">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+        
+    
+    <script type="text/javascript">
+        $('.date').datepicker();
+        $('#table').sortable();
+     
+</script>
+   
+
+

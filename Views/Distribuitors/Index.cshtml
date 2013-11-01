@@ -1,0 +1,1238 @@
+﻿@model PagedList.IPagedList<UTDWSClient.Interfaces.pDistributorList_Result>
+
+@using PagedList;
+
+@using UTDOMINICANA;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+	<script type="text/javascript">
+	    
+	    
+            function getSector(data) {
+                if (data != "edit") {
+                    var id = document.getElementById("ProvinciaComboAdd").value;
+                } else {
+                    var id = document.getElementById("ProvinciaComboEdit").value;
+                }
+                jQuery.post("@Url.Action("getSectorList", "Distribuitors")", {
+                    stateID: id
+                    
+	            },
+                    function (data) {
+                        data = jQuery.map(data, function (item, a) {
+                            return "<option value=" + item.ID + ">" + item.NAME + "</option>";
+                        });
+                        jQuery(".sectors").html(data.join(""));
+                    });
+
+            }
+	    function getDistribuitorType() {
+	        
+	        jQuery.post("@Url.Action("getBillingTypes", "Distribuitors")", {},
+                  function (data) {
+                      var count =0;
+                      data = jQuery.map(data, function (item, a) {
+                          if (count == 0) {
+                              count++;
+                              return "<option value='0'>Elija</option><option value=" + item.BILLING_TYPE_ID + ">" + item.BILLING_TYPE + "</option>";
+                          } else {
+                              return "<option value=" + item.BILLING_TYPE_ID + ">" + item.BILLING_TYPE + "</option>";
+                          }
+                      });
+                      jQuery(".types").html(data.join(""));
+                  });
+	    }
+	   
+	    function getCategoryTypes() {
+
+	        jQuery.post("@Url.Action("getCategoryTypes", "Distribuitors")", {},
+                  function (data) {
+                      data = jQuery.map(data, function (item, a) {
+
+                          return "<option value=" + item.CATEGORY_ID + ">" + item.CATEGORY + "</option>";
+                      });
+                      jQuery(".categories").html(data.join(""));
+                  });
+	        getDistribuitorType();
+	    }
+
+	    
+	    jQuery(document).ready(function () {
+
+	        jQuery("#exportExcel").click(function (e) {
+	            jQuery.post("@Url.Action("GetExcel", "Distribuitors")",{},
+                    function()
+                    {
+
+                    }
+	            )});
+	        
+	        jQuery('#print').click(function()
+                {
+	               
+
+	                jQuery('.toHide').css("display", "none");
+	                jQuery('.toHide').attr("hidden","hidden");
+	                var str = jQuery('#tablewrapper').html();
+                   
+	                newwin = window.open('', 'printwin', 'left=100,top=100,width=400,height=400');
+
+	                newwin.document.write('<HTML>\n<HEAD>\n');
+
+	                newwin.document.write('<TITLE>Print Page</TITLE>\n');
+
+	                newwin.document.write("<meta http-equiv='Pragma' content='no-cache' />");
+
+	                newwin.document.write("<link href='../../Content/receipt.css' rel='stylesheet' type='text/css' />");
+
+	                newwin.document.write("<script type='text/javascript'>\n");
+
+	                newwin.document.write('function chkstate(){\n');
+
+	                newwin.document.write('if(document.readyState=="complete"){\n');
+
+	                newwin.document.write('window.close();\n');
+
+	                newwin.document.write('}\n');
+
+	                newwin.document.write('else{\n');
+
+	                newwin.document.write('setTimeout("chkstate()",2000);\n');
+
+	                newwin.document.write('}\n');
+
+	                newwin.document.write('}\n');
+
+	                newwin.document.write('function print_win(){\n');
+
+	                newwin.document.write('window.print();\n');
+
+	                newwin.document.write('chkstate();\n');
+
+	                newwin.document.write('}\n');
+
+	                newwin.document.write('<\/script>\n');
+
+	                newwin.document.write('</HEAD>\n');
+
+	                newwin.document.write("<BODY onload='print_win()'>\n");
+
+	                newwin.document.write(str);
+
+	                newwin.document.write('</BODY>\n');
+
+	                newwin.document.write('</HTML>\n');
+
+	                newwin.document.close();
+
+	              
+                 });
+               
+
+	        
+             
+	        function validateEdit() {
+	           
+	            jQuery.post("@Url.Action("EditValidation2", "Distribuitors")", {
+	                name: jQuery('#nombreEdit').val(),
+	                representant: jQuery('#RepresentateEdit').val(),
+	                cell: jQuery('#cellEdit').val(),
+	                Address: jQuery('#direccionEdit').val(),
+	                Address2: jQuery('#direccionEdit').val(),
+	                country: jQuery('#CountryComboEdit').val(),
+	                state: jQuery('#ProvinciaComboEdit').val(),
+	                city: jQuery('#cityComboEdit').val(),
+	                sector: jQuery('#sectorComboEdit').val(),
+	                phone: jQuery('#phoneEdit').val(),
+	                email: jQuery('#emailEdit').val(),
+	                distributor: jQuery('#distributorTypeComboEdit').val(),
+	                category: jQuery('#categoryComboEdit').val()
+	            },
+                         function (data) {
+                             jQuery("#nombreEdit").addClass(data[0]);
+                             jQuery("#RepresentateEdit").addClass(data[1]);
+                             jQuery("#cellEdit").addClass(data[2]);
+                             jQuery("#direccionEdit").addClass(data[3]);
+                             jQuery("#CountryComboEdit").addClass(data[4]);
+                             jQuery("#ProvinciaComboEdit").addClass(data[5]);
+                             jQuery("#cityComboEdit").addClass(data[6]);
+                             jQuery("#sectorComboEdit").addClass(data[7]);
+                             jQuery("#phoneEdit").addClass(data[8]);
+                             jQuery("#emailEdit").addClass(data[9])
+                             jQuery("#distributorTypeComboEdit").addClass(data[10]);
+                             jQuery("#categoryComboEdit").addClass(data[11]);
+                             if(data[12] == "true") {
+                                 alert("Rellenar Los campos en rojo");
+                             } else {
+                                 hasError = "false";
+
+                                 jQuery.post("@Url.Action("editDistributor", "Distribuitors")", {
+                                     nameAdd: document.getElementById("nombreEdit").value,
+                                     RepresentateAdd: document.getElementById("RepresentateEdit").value,
+                                     cellAdd: document.getElementById("cellEdit").value,
+                                     AdressAdd: document.getElementById("direccionEdit").value,
+                                     AdressAdd2: document.getElementById("direccionEdit2").value,
+                                      CountryComboAdd: document.getElementById("CountryComboEdit").value,
+                                      StateComboAdd: document.getElementById("ProvinciaComboEdit").value,
+                                      cityComboAdd: document.getElementById("cityComboEdit").value,
+                                      sectorComboAdd: document.getElementById("sectorComboEdit").value,
+                                      phoneAdd: document.getElementById("phoneEdit").value,
+                                      faxAdd: document.getElementById("FaxEdit").value,
+                                      emailAdd: document.getElementById("emailEdit").value,
+                                      distributor: document.getElementById("distributorTypeComboEdit").value,
+                                      category: document.getElementById("categoryComboEdit").value,
+                                      ID: document.getElementById("EditID").value,
+
+                                  },
+                            function (data) {
+
+
+                                jQuery('#responsive').fadeOut();
+                                var elem = document.getElementById("modalCode");
+                                elem.value = data.Rcode;
+                                var elem2 = document.getElementById("modalMessage");
+                                elem2.value = data.Rmessague;
+                                jQuery('#btnShowModal').click();
+
+
+                            });
+                              }
+                         }
+
+                         );
+
+
+
+	        }
+	        jQuery('#btnEditDistributor').click(function () {
+
+	            validateEdit();
+
+
+	        });
+	        function Validate() {
+
+	            jQuery.post("@Url.Action("EditValidation", "Distribuitors")", {
+                    name: jQuery('#nombreAdd').val(),
+                    representant: jQuery('#RepresentateAdd').val(),
+                    cell: jQuery('#cellAdd').val(),
+                    Address: jQuery('#direccionAdd').val(),
+                    Address2: jQuery('#direccion2Add').val(),
+                    country: jQuery('#CountryComboAdd').val(),
+                    state: jQuery('#ProvinciaComboAdd').val(),
+                    city: jQuery('#cityComboAdd').val(),
+                    sector: jQuery('#sectorComboAdd').val(),
+                    phone: jQuery('#phoneAdd').val(),
+                    email: jQuery('#emailadd').val(),
+                    distributor: jQuery('#distributorTypeComboAdd').val(),
+                    category: jQuery('#categoryComboAdd').val(),
+                    user: jQuery('#userAdd').val(),
+                    paswword: jQuery('#passwordAdd').val(),
+                    pin: jQuery('#PinAdd').val(),
+                    nameUser: jQuery('#nameAdd').val(),
+                    lastname: jQuery('#apellidoAdd').val(),
+
+                },
+                          function (data) {
+
+                              jQuery("#nombreAdd").addClass(data[0]);
+                              jQuery("#RepresentateAdd").addClass(data[1]);
+                              jQuery("#cellAdd").addClass(data[2]);
+                              jQuery("#direccionAdd").addClass(data[3]);
+                              jQuery("#CountryComboAdd").addClass(data[4]);
+                              jQuery("#ProvinciaComboAdd").addClass(data[5]);
+                              jQuery("#cityComboAdd").addClass(data[6]);
+                              jQuery("#sectorComboAdd").addClass(data[7]);
+                              jQuery("#phoneAdd").addClass(data[8]);
+                              jQuery("#emailadd").addClass(data[9]);
+                              jQuery("#distributorTypeComboAdd").addClass(data[10]);
+                              jQuery("#categoryComboAdd").addClass(data[11]);
+                              jQuery("#userAdd").addClass(data[12]);
+                              jQuery("#passwordAdd").addClass(data[13]);
+                              jQuery("#PinAdd").addClass(data[14]);
+                              jQuery("#nameAdd").addClass(data[15]);
+                              jQuery("#apellidoAdd").addClass(data[16]);
+                              if (data[17] == "true") {
+                                  alert("Rellenar Los campos en rojo");
+                              } else {
+                                  hasError = "false";
+                              
+                              jQuery.post("@Url.Action("addDistributor", "Distribuitors")", {
+                                  nameAdd: document.getElementById("nombreAdd").value,
+                                  RepresentateAdd: document.getElementById("RepresentateAdd").value,
+                                  cellAdd: document.getElementById("cellAdd").value,
+                                  AdressAdd: document.getElementById("direccionAdd").value,
+                                  AdressAdd2: document.getElementById("direccion2Add").value,
+                                  CountryComboAdd: document.getElementById("CountryComboAdd").value,
+                                  StateComboAdd: document.getElementById("ProvinciaComboAdd").value,
+                                  cityComboAdd: document.getElementById("cityComboAdd").value,
+                                  sectorComboAdd: document.getElementById("sectorComboAdd").value,
+                                  phoneAdd: document.getElementById("phoneAdd").value,
+                                  faxAdd: document.getElementById("faxAdd").value,
+                                  emailAdd: document.getElementById("emailadd").value,
+                                  distributor: document.getElementById("distributorTypeComboAdd").value,
+                                  category: document.getElementById("categoryComboAdd").value,
+                                  userAdd: document.getElementById("userAdd").value,
+                                  passwordAdd: document.getElementById("passwordAdd").value,
+                                  PinAdd: document.getElementById("PinAdd").value,
+                                  nameUserAdd: document.getElementById("nameAdd").value,
+                                  apellidoAdd: document.getElementById("apellidoAdd").value,
+                              
+                              },
+                        function (data) {
+
+                            
+                            jQuery('#cerrarModalAdd').click();
+                            var elem = document.getElementById("modalCode");
+                            elem.value = data.Rcode;
+                            var elem2 = document.getElementById("modalMessage");
+                            elem2.value = data.Rmessague;
+                            jQuery('#btnShowModal').click();
+                            
+                           
+                        });
+                              }
+                          });
+            }
+	       
+
+	        var IDEdit;
+	            jQuery.post("@Url.Action("getCountryList", "Distribuitors")", {
+                },
+                    function (data) {
+                        var count = 0;
+                        data = jQuery.map(data, function (item, a) {
+                            if (count == 0) {
+                                count++;
+                                return "<option value='0'>Elija  una opcion</option><option class='clickedOptionCountry' value=" + item.ID + ">" + item.NAME + "</option>";
+                            } else {
+                                return "<option class='clickedOptionCountry' value=" + item.ID + ">" + item.NAME + "</option>";
+                            }
+                        });
+                        jQuery(".pais").html(data.join(""));
+                        
+                        
+                      
+                    });
+	        jQuery.post("@Url.Action("getCityList", "Distribuitors")", {
+	        },
+                   function (data) {
+                       var count = 0;
+                       data = jQuery.map(data, function (item, a) {
+                           if (count == 0) {
+                               count++;
+                               return "<option value='0' >Elija  una opcion</option><option class='clickedOptionCountry' value=" + item.ID + ">" + item.NAME + "</option>";
+
+                           } else {
+                               return "<option  value=" + item.ID + ">" + item.NAME + "</option>";
+                           }
+                       });
+                       jQuery(".ciudad").html(data.join(""));
+
+
+
+                   });
+	       
+	      
+          
+	        // initiate layout and plugins
+            
+	        jQuery('.btnEdit').click(function () {
+	            IDEdit = (this).getAttribute("data-id");
+	         
+	            jQuery.post("@Url.Action("getDistributorByid", "Distribuitors")",
+                    {
+                        ID:(this).getAttribute("data-id")
+                    },
+                    function(data)
+                    { 
+                        var elem = document.getElementById("nombreEdit");
+                        elem.value = data.DISTRIBUTOR;
+                        jQuery('#EditID').val(IDEdit);
+                        var elem2 = document.getElementById("RepresentateEdit");
+                        elem2.value = data.REPRESENTATIVE;
+                        var elem4 = document.getElementById("cellEdit");
+                        elem4.value = data.CELL;
+                        var elem5 = document.getElementById("direccionEdit");
+                        elem5.value = data.ADDRESS;
+                        var elem6 = document.getElementById("CountryComboEdit");
+                        elem6.value = data.COUNTRY_ID;
+                        var elem7 = document.getElementById("ProvinciaComboEdit");
+                        elem7.value = data.STATE_ID;
+                        var elem8 = document.getElementById("cityComboEdit");
+                        elem8.value = data.CITY_ID;
+                        var elem9 = document.getElementById("sectorComboEdit");
+                        elem9.value = data.SECTOR_ID;
+                        var elem10 = document.getElementById("phoneEdit");
+                        elem10.value = data.PHONE;
+                        var elem11 = document.getElementById("FaxEdit");
+                        elem11.value = data.FAX;
+                        var elem12 = document.getElementById("emailEdit"); 
+                        elem12.value = data.EMAIL;
+                        var elem13 = document.getElementById("distributorTypeComboEdit");
+                        elem13.value = data.BILLING_TYPE_ID;
+                        var elem14 = document.getElementById("categoryComboEdit");
+                        elem14.value = data.ENTITY_CATEGORY_ID;
+
+                    }
+	        );
+	        });
+           
+	        jQuery('#btnAddDistributor').click(function () {
+	            
+	            Validate();
+	            
+	            
+
+	        });
+
+	        jQuery('#btnEditDistributor').click(function ()
+	        {
+	            
+	            jQuery.post("@Url.Action("editDistributor", "Distribuitors")",
+                    {
+                        nombreEdit: document.getElementById("nombreEdit").value,
+                        RepresentateEdit: document.getElementById("RepresentateEdit").value,
+                        cellEdit: document.getElementById("cellEdit").value,
+                        direccionEdit: document.getElementById("direccionEdit").value,
+                        CountryComboEdit: document.getElementById("CountryComboEdit").value,
+                        ProvinciaComboEdit: document.getElementById("ProvinciaComboEdit").value,
+                        cityComboEdit: document.getElementById("cityComboEdit").value,
+                        sectorComboEdit: document.getElementById("sectorComboEdit").value,
+                        phoneEdit: document.getElementById("phoneEdit").value,
+                        faxEdit: document.getElementById("faxEdit").value,
+                        emailEdit: document.getElementById("emailEdit").value,
+                        distributorTypeComboEdit: document.getElementById("distributorTypeComboEdit").value,
+                        categoryComboEdit: document.getElementById("categoryComboEdit").value,
+                        userEdit: document.getElementById("userEdit").value,
+                        passwordEdit: document.getElementById("passwordEdit").value,
+                        PinEdit: document.getElementById("PinEdit").value,
+                        nameEdit: document.getElementById("nameEdit").value,
+                        apellidoEdit: document.getElementById("apellidoEdit").value
+                    },function(data)
+                    {
+
+                        jQuery('#responsive1').fadeOut(100);
+                        var elem = document.getElementById("modalCode");
+                        elem.value = data.Rcode;
+                        var elem2 = document.getElementById("modalMessage");
+                        elem2.value = data.Rmessague;
+                        
+                        
+                    });
+	           
+	            jQuery('option').click(function () {
+	                
+	                var id = document.getElementById("cityComboAdd").value;
+
+	                jQuery.post("@Url.Action("getStateList", "Distribuitors")", {
+	                countryID: id
+	            },
+                    function (data) {
+                        data = jQuery.map(data, function (item, a) {
+                            return "<option  value=" + item.STATE + ">" + item.STATE_ID + "</option>";
+                        });
+                        jQuery(".states").html(data.join(""));
+
+
+
+                    });
+	            });
+
+
+	        });
+
+
+           
+	       
+
+
+	        
+		  
+		   function openModal() {
+		       jQuery('#editModal').fadeIn(400);
+		       jQuery('.modal-scrollable').fadeIn(400);  
+		   }
+		   function closeModal() {
+		       jQuery('#editModal').fadeOut(400);
+		   }
+		   function AlertThem() {
+		       alert("onChange");
+		   }
+
+
+		   window.onload = formfocus();
+		});
+    </script>
+<div class="portlet box red page-content content-wrapper clear-fix">
+    <div class="tittle" style="background-color: rgba(53,170,71,0.8); border: 1px; border-radius: 20px !important; padding: 10px 10px 10px 10px; margin-bottom: 10px">
+
+        <div class="tile bg-green">
+            
+
+            <div class="tile-object">
+                <div class="name" style="font-weight: bold; font-size: 22px">
+                    <h5><i class="icon-user big">&nbsp;</i>Administracion de Distribuidores</h5>
+                </div>
+                <div class="number"></div>
+            </div>
+        </div>
+
+
+    </div>
+    @using (Html.BeginForm("Index", "Distribuitors", FormMethod.Post, new {@ID="pForm", @role = "form", @class = "form", @style = "background-color:rgba(255,255,255,1);border:1px;border-radius:20px !important;padding:10px 10px 10px 10px" }))
+    {
+
+        <div class="controls">
+            <div class="form-group">
+                <div class="row-fluid">
+                <div class="span6">
+                <label for="id">Distribuidor</label>
+                <input class=" input-lg m-wrap span12" name="distributor" type="text" id="distribuidor" />
+                    </div><div class="span6">
+                <label for="ID">ID</label>
+                        <input class=" input-lg m-wrap span12" name="ID" type="text" id="ID" />
+                          </div>
+                
+           <div class="controls controls-row">
+            <div class="span6">
+                <label for="estatus">Estado</label>
+                <select class=" input-lg m-wrap span12" name="estatus" id="estatus" style="margin-left:0px">
+                    <option value="1" title="Todos" id="estatus1">Activo</option>
+                    <option value="2" id="estatus2">Inactivo</option>
+                    <option value="3" id="estatus3">Bloqueado</option>
+                </select>
+            </div>
+               <div class="span6">
+                   <label >Resultados por pagina</label>
+                       <select class="m-wrap span12" name="resulbypage"><option value="10" selected>10</option><option value="20">20</option><option value="30">30</option><option value="40">40</option><option value="50">50</option></select>
+                       
+               </div>
+                </div></div>
+
+          
+        </div>
+            </div>
+   
+     <div style="background-color:rgba(53,170,71,0.8);border:1px;border-radius:20px !important;padding:10px 10px 10px 10px;margin-bottom:10px">
+
+            <div class="row-fluid">
+                
+
+                                    <button type="submit" class="btn blue span2">
+                                        Buscar<i  class="icon-search white"></i>
+                                    </button>
+                                 
+                                
+                                    <button class="btn purple span2">
+									@Html.ActionLink("Exel", "GetExcel")
+										</button>
+								
+									<button class="btn blue span2" id="print" style="height:33px !important;min-height:33px !important;font-size:13px;vertical-align:top" >Imprimir
+										<i class="icon-print" style="margin-bottom:50% !important;"></i>
+										
+									
+									</button>
+                                    <a class="btn yellow span2"  style="height:33px !important;min-height:33px !important;font-size:13px"   href="#responsive2" onclick="getDistribuitorType();getCategoryTypes();getStateList(event); getSectorList();" data-toggle="modal">Distribuidor
+										<i class="icon-plus-sign"></i>
+									
+									</a>
+									
+			</div>
+        
+        </div>
+        }
+        <div class="content-wrapper clear-fix" id="tableholder">
+            <div class="modal-body" id="body">
+                <div id="tablewrapper">
+           	<table id="table" class="table table-striped table-bordered table-hover table-full-width" >
+                <thead>
+                    <tr>
+                        <th class="toHide">Opciones</th>
+                        <th>Nombre</th>
+                        <th>Telefono</th>
+                        <th class="hidden-tablet">Representativo</th>
+                        <th class="hidden-tablet">ciudad</th>
+                        <th class="hidden-tablet">Estatus</th>
+                        
+                    </tr>
+                </thead>
+                   
+                <tbody id="bodyTable">
+                    @if (Model != null)
+                    {
+                        foreach (var key in Model)
+                        {
+                        <tr id="@key.DISTRIBUTOR_ID">
+                         
+                               <td style="white-space:nowrap" class="toHide" >
+                                  <a type="button"  title="Editar Este Distribuidor" class="btnEdit blue icon-edit big" id="btnEdit" onclick="getDistribuitorType();getCategoryTypes();getStateList(event); getSectorList();"  data-toggle="modal"  href="#responsive" data-id="@key.DISTRIBUTOR_ID" style="text-decoration:none"></a>
+                                  <a type="button" title="Agregar Balance al Distribuidor"  class="btnEdit red icon-money big" id="btnDelete" data-toggle="modal"  href="#responsiveBalance" data-id="@key.DISTRIBUTOR_ID" style="background-color:rgba(255, 0, 0,0.5)"></a>
+                               </td>
+                           
+                            <td id="rowId" hidden="hidden" style="white-space:nowrap"></td>
+                            <td style="white-space:nowrap">@key.DISTRIBUTOR</td>
+                            <td style="white-space:nowrap">@key.PHONE</td>
+                            <td style="white-space:nowrap" class="hidden-tablet">@key.REPRESENTATIVE</td>
+                            <td style="white-space:nowrap" class="hidden-tablet">@key.COUNTRY</td>
+                            <td style="white-space:nowrap" class="hidden-tablet">@key.ENTITY_STATUS</td>
+                        </tr>
+                        }
+                    }
+                </tbody>
+                   </table>
+  <div id="paging" class="pagination focus">
+    
+                 </div>
+            </div>
+            
+               
+            
+  </div>
+      
+
+    
+    </div>
+   
+    <div class="modal-scrollable hide" id="modalEditBackground" style="z-index: 10050;">
+         
+        <div id="responsive" class="modal hide fade EditarDistributor" tabindex="-1" data-focus-on="input:first" style="display: none;margin-top:0px !important;top:0% !important;bottom:0% !important" aria-hidden="false">
+            <div class="modal-header" style="background-color:rgba(126,150,66,0.4)">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3>Editar Distribuidor&nbsp;<i class="icon-edit"></i></h3>
+            </div>
+
+            <div class="modal-body">
+                  <div class="row-fluid">
+													<div class="span12 ">
+														<div class="control-group">
+															<label class="control-label span2" for="firstName">Nombre:<i style="color:red">*</i></label>
+															<div class="controls span10">
+																<input type="text" id="nombreEdit" class="m-wrap span12" required>
+															</div>
+														</div>
+                                                        <input style="display:none" id="EditID" />
+													</div>
+													
+					</div>
+                 <div class="row-fluid">
+													<div class="span8 ">
+														<div class="control-group">
+															<label class="control-label span3" for="firstName">Representate:<i style="color:red">*</i></label>
+															<div class="controls span9">
+																<input type="text" id="RepresentateEdit" class="m-wrap span12" >
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+													<div class="span4">
+														<div class="control-group">
+															<label class="control-label span2" for="lastName">Cell:<i style="color:red">*</i></label>
+															<div class="controls span10">
+																<input type="text" id="cellEdit" class="m-wrap span12"  />
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+					</div>
+                  <div class="row-fluid">
+													<div class="span12 ">
+														<div class="control-group">
+															<label class="control-label span2" for="firstName" >Direccion:<i style="color:red">*</i></label>
+															<div class="controls span10">
+																<input type="text" id="direccionEdit" class="m-wrap span12" required />
+															</div>
+                                                            
+														</div>
+													</div>
+													
+					</div>
+                <div class="row-fluid">
+                    <div class="control-group">
+                        <label class="control-label span2" for="lastName"></label>
+                    <div class="controls span10">
+			         <input type="text" id="direccionEdit2" class="m-wrap span12" />
+					</div>
+                        </div>
+                </div>
+                <div class="row-fluid">
+													<div class="span6">
+														<div class="control-group">
+															<label class="control-label span4" for="firstName">Pais:<i style="color:red">*</i></label>
+															<div class="controls span8">
+											               <select class="m-wrap span12 pais" style="height: 32px; margin-top: 5px;" onchange="getStateList(event);"  name="status" id="CountryComboEdit" required>
+                                                          
+                                                            </select>
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+													<div class="span6">
+														<div class="control-group">
+															<label class="control-label span4" for="lastName">PROVINCIA:</label>
+															<div class="controls span8">
+																<select class="m-wrap span12 states"  style="height: 26px; margin-top: 5px;" name="status" id="ProvinciaComboEdit" >
+                                                                 <option value="0" selected>Elija</option>
+                                                            </select>
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+				</div>
+                 <div class="row-fluid">
+													<div class="span6">
+														<div class="control-group">
+															<label class="control-label span4" for="firstName">Ciudad:<i style="color:red">*</i></label>
+															<div class="controls span8">
+																<select class="m-wrap span12 ciudad"  style="height: 26px; margin-top: 5px;" onchange="getStateList(event);" name="status" id="cityComboEdit" >
+                                                            <option value="0" selected>Elija</option>
+                                                            </select>
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+													<div class="span6">
+														<div class="control-group">
+															<label class="control-label span4" for="lastName">Sector:</label>
+															<div class="controls span8">
+																<select class="m-wrap span12 sectors" style="height: 26px; margin-top: 5px;" onchange="getSectorList(event);" name="status" id="sectorComboEdit">
+                                                                  <option value="0" selected>Elija</option>
+                                                            </select>
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+					</div>
+                 <div class="row-fluid">
+													<div class="span6">
+														<div class="control-group">
+															<label class="control-label span4" for="firstName">Telefono</label>
+															<div class="controls span8">
+																<input type="text" id="phoneEdit" class="m-wrap span12" >
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+													<div class="span6">
+														<div class="control-group">
+															<label class="control-label span4" for="lastName">Fax:</label>
+															<div class="controls span8">
+																<input type="text" id="FaxEdit" class="m-wrap span12"  />
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+					</div>
+                <div class="row-fluid">
+													<div class="span12 ">
+														<div class="control-group">
+															<label class="control-label span2" for="firstName">Email:<i style="color:red">*</i></label>
+															<div class="controls span10">
+																<input type="text" id="emailEdit" class="m-wrap span12" >
+															</div>
+														</div>
+													</div>
+													
+					</div>
+                <div class="row-fluid">
+													<div class="span6">
+														<div class="control-group">
+															<label class="control-label span4" for="firstName" >Distribuidor: Tipo<i style="color:red">*</i></label>
+															<div class="controls span8">
+																<select class="m-wrap span12 types" style="height: 26px; margin-top: 5px;" name="status" id="distributorTypeComboEdit">
+                                                              <option selected value="0">Elija Una Opcion</option>
+                                                            </select>
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+													<div class="span6">
+														<div class="control-group">
+															<label class="control-label span4" for="lastName">Categoria:<i style="color:red">*</i></label>
+															<div class="controls span8">
+																<select class="m-wrap span12 categories" style="height: 26px; margin-top: 5px;" name="status" id="categoryComboEdit">
+                                                           
+                                                            </select>
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+					</div>
+                </div>
+            
+           <div class="modal-footer">
+
+                <button type="button" data-dismiss="modal" id="closeModalEdit" class="btn">Cerrar</button>
+                <a type="button" class="btn blue" id="btnEditDistributor" onclick="validateEdit();" >Guardar</a>
+            </div>
+        </div>
+</div>
+<a hidden="hidden" type="button" data-dismiss="modal" class="btn blue" id="btnShowModal"  href="#responsive3" style="display:none" data-toggle="modal">Guardar</a>
+
+    <div class="modal-scrollable hide" id="modalAddBackground" style="z-index: 10050;">
+        <div id="responsive2" class="modal hide fade AgregarDistribuidor" tabindex="-1" data-focus-on="input:first" style="position:absolute;display: none;margin-top:0px !important;top:0% !important;bottom:0% !important" aria-hidden="false">
+                 <div class="modal-header" style="background-color: rgba(126,150,66,0.4)">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3>Adicionar Distribuidor&nbsp;<i class="icon-edit"></i></h3>
+            </div>
+
+            <div class="modal-body" style="height:100% !important;max-height: 100%;">
+                 <div class="row-fluid">
+													<div class="span12 ">
+														<div class="control-group">
+															<label class="control-label span2" for="firstName" >Nombre:<i style="color:red">*</i></label>
+															<div class="controls span10">
+																<input type="text" id="nombreAdd" class="m-wrap span12" required>
+															</div>
+														</div>
+													</div>
+													
+					</div>
+                 <div class="row-fluid">
+													<div class="span8 ">
+														<div class="control-group">
+															<label class="control-label span3" for="firstName">Representate:<i style="color:red">*</i></label>
+															<div class="controls span8">
+																<input type="text" id="RepresentateAdd" class="m-wrap span12" >
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+													<div class="span4 ">
+														<div class="control-group">
+															<label class="control-label span2" for="lastName">Cell:</label>
+															<div class="controls span10">
+																<input type="text" id="cellAdd" class="m-wrap span12"  />
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+					</div>
+                  <div class="row-fluid">
+													<div class="span12 ">
+														<div class="control-group">
+															<label class="control-label span2" for="firstName">Direccion:<i style="color:red">*</i></label>
+															<div class="controls span10">
+																<input type="text" id="direccionAdd" class="m-wrap span12" required>
+															</div>
+														</div>
+													</div>
+													
+					</div>
+                <div class="row-fluid">
+													<div class="span12 ">
+														<div class="control-group">
+															<label class="control-label span2" for="firstName"></label>
+															<div class="controls span10">
+																<input type="text" id="direccion2Add" class="m-wrap span12" required>
+															</div>
+														</div>
+													</div>
+													
+					</div>
+                <div class="row-fluid">
+													<div class="span6">
+														<div class="control-group">
+															<label class="control-label span4" for="firstName">Pais:<i style="color:red">*</i></label>
+															<div class="controls span8">
+											              <select class="m-wrap span12 pais" style="height: 32px; margin-top: 5px;" name="status" onchange="getStateList(event);" id="CountryComboAdd">
+                                                           <option value="0" selected>Elija</option>   
+                                                            </select>
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+													<div class="span6">
+														<div class="control-group">
+															<label class="control-label span4" for="lastName">PROVINCIA:<i style="color:red">*</i></label>
+															<div class="controls span8">
+																<select class="m-wrap span12 states" style="height: 26px; margin-top: 5px;" name="status" id="ProvinciaComboAdd" onchange="getSectorList();">
+                                                            <option value="0" selected>Elija</option>
+                                                            </select>
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+				</div>
+                 <div class="row-fluid">
+													<div class="span6">
+														<div class="control-group">
+															<label class="control-label span4" for="firstName">Ciudad: <i style="color:red">*</i></label>
+															<div class="controls span8">
+																<select class="m-wrap span12 ciudad" style="height: 26px; margin-top: 5px;" name="status" id="cityComboAdd" onchange="getStateList(event);">
+                                                            <option value="0" selected>Elija</option>
+                                                            </select>
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+													<div class="span6">
+														<div class="control-group">
+															<label class="control-label span4" for="lastName">Sector:</label>
+															<div class="controls span8">
+																<select class="m-wrap span12 sectors" style="height: 26px; margin-top: 5px;" name="status" id="sectorComboAdd">
+                                                            <option value="0" selected>Elija</option>    
+                                                            </select>
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+					</div>
+                 <div class="row-fluid">
+													<div class="span6">
+														<div class="control-group">
+															<label class="control-label span4" for="firstName">Telefono: <i style="color:red">*</i></label>
+															<div class="controls span8">
+																<input type="text" id="phoneAdd" class="m-wrap span12" required />
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+													<div class="span6">
+														<div class="control-group">
+															<label class="control-label span4" for="lastName">Fax:</label>
+															<div class="controls span8">
+																<input type="text" id="faxAdd" class="m-wrap span12"  />
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+					</div>
+                <div class="row-fluid">
+													<div class="span12 ">
+														<div class="control-group">
+															<label class="control-label span2" for="firstName" >Email: <i style="color:red">*</i></label>
+															<div class="controls span10">
+																<input type="email"  id="emailadd" class="m-wrap span12"  required/>
+															</div>
+														</div>
+													</div>
+													
+					</div>
+                <div class="row-fluid">
+													<div class="span6">
+														<div class="control-group">
+															<label class="control-label span4" for="firstName" >Distribuidor: tipo</label>
+															<div class="controls span7">
+																<select class="m-wrap span12 types" style="height: 26px; margin-top: 5px;" name="status" id="distributorTypeComboAdd">
+                                                           
+                                                            </select>
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+													<div class="span6">
+														<div class="control-group">
+															<label class="control-label span4" for="lastName">Categoria:</label>
+															<div class="controls span8">
+																<select class="m-wrap span12 categories" style="height: 26px; margin-top: 5px;" name="status" id="categoryComboAdd">
+                                                           
+                                                            </select>
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+					</div>
+                <hr />
+                <div class="row-fluid">
+													<div class="span6">
+														<div class="control-group">
+															<label class="control-label span4" for="firstName">Usuario:</label>
+															<div class="controls span8">
+																<input type="text" id="userAdd" class="m-wrap span12" />
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+													
+													<!--/span-->
+					</div>
+                <div class="row-fluid">
+													<div class="span6">
+														<div class="control-group">
+															<label class="control-label span4" for="firstName">Password:<i style="color:red">*</i></label>
+															<div class="controls span8">
+																<input type="password" id="passwordAdd" class="m-wrap span12" >
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+													<div class="span6">
+														<div class="control-group">
+															<label class="control-label span4" for="lastName">Pin:<i style="color:red">*</i></label>
+															<div class="controls span8">
+																<input type="password" id="PinAdd" class="m-wrap span12"  />
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+
+					</div>
+                 <div class="row-fluid">
+													<div class="span6">
+														<div class="control-group">
+															<label class="control-label span4" for="firstName">Nombre:<i style="color:red">*</i></label>
+															<div class="controls span8">
+																<input type="text" id="nameAdd" class="m-wrap span12" >
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+													<div class="span6">
+														<div class="control-group">
+															<label class="control-label span4" for="lastName">Apellido:<i style="color:red">*</i></label>
+															<div class="controls span8">
+																<input type="text" id="apellidoAdd" class="m-wrap span12"  />
+															</div>
+														</div>
+													</div>
+													<!--/span-->
+					</div>
+
+                
+            <div class="modal-footer">
+
+                <button type="button" data-dismiss="modal" id="cerrarModalAdd"  class="btn">Cerrar</button>
+                <a type="button"  class="btn blue"  id="btnAddDistributor" data-toggle="modal" onclick="Validate();" >Adicionar</a>
+            </div>
+        </div>
+</div>
+    <div class="modal-scrollable hide" id="modalResult" style="z-index: 10050;">
+        <div id="responsive3" class="modal fade" tabindex="-1" data-focus-on="input:first" style="display: none;margin-top:0px !important;top:0% !important;" aria-hidden="false">
+            <div class="modal-header" style="background-color:rgba(126,150,66,0.4)">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3>Resultado&nbsp;<i class="icon-edit"></i></h3>
+            </div>
+
+            <div class="modal-body" >
+                <div class="row-fluid">
+                    <div class="span12">
+                        <label for="usuario">Codigo</label>
+                            <input  id="modalCode"  class="m-wrap span12" readonly="true"/>
+                    </div>
+                    <div class="span12" style="margin-left:0px;" >
+                        <label for="clave">Mensaje</label>
+                            <input readonly="true"  id="modalMessage"  class="m-wrap span12" />
+                   
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" onclick="window.location.reload();" id="modalDataButton" class="btn blue">Aceptar</button>
+            </div>
+        </div>
+</div>
+    <div class="modal-scrollable hide" style="z-index: 10050;">
+        <div id="responsiveBalance" class="modal hide fade" tabindex="-1" data-focus-on="input:first" style="display: none;" aria-hidden="false">
+            <div class="modal-header" style="background-color: rgba(126,150,66,0.4)">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3>Agregar Balance&nbsp;<i class="icon-edit"></i></h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="tabbable">
+                    <ul class="nav nav-tabs padding-12 tab-color-blue background-blue" id="myTab4">
+                        <li class="">
+                            <a data-toggle="tab"  href="#home4">Adicionar Balance</a>
+                        </li>
+
+                        <li class="">
+                            <a data-toggle="tab"  href="#profile4">Historial</a>
+                        </li>
+
+                       
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="home4" class="tab-pane active">
+                            <div class="row-fluid">
+                                <div class="controls">
+                                    <div class="span12" hidden="hidden"></div>
+                                     <div class="controls controls-row">
+                                    <div class="span6">
+                                        <label for="idGrupo">Operacion</label>
+                                        <select class="m-wrap span12" name="combovendor" id="comboOperacion">
+                                            <option value="1" title="Todos">Adicionar Balance</option>
+                                            <option value="2" title="Todos">Descontar Balance</option>
+                                        </select> </div>
+                                    <div class="span6">
+                                        <label for="descripcion">Swift Code</label>
+                                        <input class="m-wrap span12" name="descripcion" type="text" id="descripcion"  />
+                                    </div></div> <div class="controls controls-row">
+                                    <div class="span6">
+                                       <label for="nombre">Aba Number</label>
+                                        <input class="m-wrap span12" name="nombre" type="text" id="nombre" />
+                                    </div>
+                                    <div class="span6">
+                                        <label for="contacto">Monto</label>
+                                        <input class="m-wrap span12" name="contacto" type="text" id="contacto" />
+                                    </div></div> <div class="controls controls-row">
+                                    <div class="span6">
+                                        <label for="email">Nota</label>
+                                        <input class="m-wrap span12 " name="email" aria-multiline="true" type="text" id="email" />
+                                    </div></div>
+                                    <div class="controls controls-row">
+                                    <div class="span6">
+                                        <label for="telefono">Limite de credito</label>
+                                        <input class="m-wrap span12" name="telefono" type="tel" id="telefono" />
+                                    </div>
+                                    <div class="span3" style="margin-top:5px !important">
+                                         <label for="telefono">&nbsp;&nbsp;&nbsp;</label>
+                                        <button class="btn blue m-wrap span12">Actualizar&nbsp;<i class="icon-money"></i></button>
+                                    </div>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="profile4" class="tab-pane">
+
+                            <div class="form-group">
+                                <div class="row-fluid">
+                                    
+                                    <div class="span6">
+                                        <label for="2011/06/26">Fecha Inicial</label>
+                                        <input type="text" class="date m-wrap span12" />
+                                    </div>
+                                    <div class="span6">
+                                        <label for="2011/06/26">Fecha Final</label>
+                                        <input type="text" class="date m-wrap span12" />
+                                    </div>
+                                    
+                                </div>
+                                <div class="content-wrapper clear-fix">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Fecha</th>
+                                                <th>ID</th>
+                                                <th>Tipo Transaccion</th>
+                                                <th>Monto</th>
+                                                <th>Balance Anterior</th>
+                                                <th>Nuevo Balance</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>marvin</td>
+                                                <td>si</td>
+                                                <td>120000</td>
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
+
+
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" data-dismiss="modal" class="btn">Cerrar</button>
+                <button type="button" class="btn blue">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+    
+   
+   
+ 
+</div>
+
+<script type="text/javascript">
+   
+        getSectorList();
+    function changetextbox() {
+
+        alert("alert");
+
+    }
+    function getStateList(event) {
+        
+        var ID = document.getElementById("CountryComboAdd").value;
+        if (ID == 0) {
+            ID = document.getElementById("CountryComboEdit").value;
+        }
+        jQuery.post("@Url.Action("getStateList", "Distribuitors")", {
+            countryID: ID
+        },
+                   function (data) {
+                       var times = 0;
+                       data = jQuery.map(data, function (item, a) {
+                           if (times == 0) {
+                               times++;
+                               return "<option selected value='0'>Elija</option><option value=" + item.STATE_ID + ">" + item.STATE + "</option>";
+                           } else {
+                               return "<option value=" + item.STATE_ID + ">" + item.STATE + "</option>"
+                           }
+                       });
+                       jQuery(".states").html(data.join(""));
+                   });
+
+    }
+   
+    function getSectorList() {
+        var id = document.getElementById("ProvinciaComboAdd").value;
+        
+        if (id = 0) {
+            id = document.getElementById("ProvinciaComboEdit").value;
+        }
+        jQuery.post("@Url.Action("getSectorList", "Distribuitors")", {
+            stateID: id
+        },
+                  function (data) {
+                      var times = 0;
+                      data = jQuery.map(data, function (item, a) {
+                         
+                          if (times == 0) {
+                              times++;
+                              return "<option selected value='0'>Elija</option><option value=" + item.SECTOR_ID + ">" + item.SECTOR + "</option>"
+
+                          } else {
+                              return "<option value=" + item.SECTOR_ID + ">" + item.SECTOR + "</option>";
+                          } 
+                      });
+                      jQuery(".sectors").html(data.join(""));
+    
+                  });
+    }
+    
+    
+
+    
+    function setElementREd(data) {
+        document.getElementById(data).style.border="border 1px solid red !important";
+    }
+
+	</script>
+<script>
+    jQuery(document).ready(function () {
+        // initiate layout and plugins
+        App.init();
+        TableAdvanced.init();
+    });
+	</script>
+   <script>
+       jQuery(document).ready(function () {
+           jQuery('.date').datepicker();
+           jQuery('#table').sortable();
+       });
+	</script>
+
+
+
+ 
+
+

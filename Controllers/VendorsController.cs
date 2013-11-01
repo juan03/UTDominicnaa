@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using UTDOMINICANA.Models;
+
+namespace UTDOMINICANA.Controllers
+{
+    public class VendorsController : Controller
+    {
+        //
+        // GET: /Vendors/
+
+        public ActionResult Index()
+        {
+            Vendors vendor = new Vendors() { id=1, nombre="vendorName", telefono=8095325, email="email", distribuidor="distribuitor", organizacion="org" };
+            List<Vendors> listVendor = new List<Vendors>();
+            listVendor.Add(vendor); listVendor.Add(vendor);
+            return View(listVendor);
+        }
+
+    }
+}

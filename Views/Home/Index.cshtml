@@ -1,0 +1,240 @@
+﻿@model List<UTDOMINICANA.Models.User>
+
+
+@{
+    
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+
+    }
+
+
+
+	
+    <script type="text/javascript" src="//www.google.com/jsapi"></script>
+  
+    <script type="text/javascript">
+        google.load('visualization', '1', { packages: ['corechart'] });
+        google.load('visualization2', '1', { packages: ['corechart'] });
+    </script>
+<script type="text/javascript">
+    function printDiv(divID) {
+        //Get the HTML of div
+        var divElements = document.getElementById(divID).innerHTML;
+        //Get the HTML of whole page
+        var oldPage = document.body.innerHTML;
+
+        //Reset the page's HTML with div's HTML only
+        document.body.innerHTML = "<html><head><title></title></head><body>" + divElements + "</body>";
+
+        //Print Page
+        window.print();
+
+        //Restore orignal HTML
+        document.body.innerHTML = oldPage;
+
+        //disable postback on print button
+        return false;
+    }
+
+
+    function drawVisualization() {
+        // Some raw data (not necessarily accurate)
+        var data = google.visualization.arrayToDataTable([
+          ['1', '2', '3', '4', '5', '6'],
+          ['2004/05', 165, 938, 522, 998, 450],
+          ['2005/06', 135, 1120, 599, 1268, 288],
+          ['2006/07', 157, 1167, 587, 807, 397],
+          ['2007/08', 139, 1110, 615, 968, 215],
+          ['2008/09', 136, 691, 629, 1026, 366]
+        ]);
+
+        // Create and draw the visualization.
+        var ac = new google.visualization.BarChart(document.getElementById('visualization'));
+        ac.draw(data, {
+
+            title: 'Total Venta Distribuidores', titleTextStyle: { color: 'black' },
+
+            pieHole: 0.4,
+            backgroundColor: '#F6F6F6',
+            opacity: 0.8,
+            color: '#FFFFFF',
+            is3D: true,
+            colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6']
+        }); setTimeout(drawVisualization, 1500);
+    }
+    function drawVisualization3() {
+        // Create and populate the data table.
+        var data = google.visualization.arrayToDataTable([
+          ['Year', 'Austria', 'Belgium', 'Czech Republic', 'Finland', 'France', 'Germany'],
+          ['2003', 1336060, 3817614, 974066, 1104797, 6651824, 15727003],
+          ['2004', 1538156, 3968305, 928875, 1151983, 5940129, 17356071],
+          ['2005', 1576579, 4063225, 1063414, 1156441, 5714009, 16716049],
+          ['2006', 1600652, 4604684, 940478, 1167979, 6190532, 18542843],
+          ['2007', 1968113, 4013653, 1037079, 1207029, 6420270, 19564053],
+          ['2008', 1901067, 6792087, 1037327, 1284795, 6240921, 19830493]
+        ]);
+
+        // Create and draw the visualization.
+        new google.visualization.ColumnChart(document.getElementById('visualization3')).
+            draw(data,
+                 {
+                     title: "Yearly Coffee Consumption by Country",
+                     colors: ['#9040D5','#620CAC','#A368D5','#8F2471','#7C005A','#BE008A','#3A2E85','#2C17B1','#160773','#BFB930','#FFF400'], backgroundColor: '#F6F6F6',
+                     hAxis: { title: "Year" }
+                 }
+  ); setTimeout(drawVisualization3, 1500);
+    }
+    function drawVisualization2() {
+        // Some raw data (not necessarily accurate)
+        var data = google.visualization.arrayToDataTable([
+          ['1', '2', '3', '4', '5', '6'],
+          ['2004/05', 165, 938, 522, 998, 450],
+          ['2005/06', 135, 1120, 599, 1268, 288],
+          ['2006/07', 157, 1167, 587, 807, 397],
+          ['2007/08', 139, 1110, 615, 968, 215],
+          ['2008/09', 136, 691, 629, 1026, 366]
+
+        ]);
+
+        // Create and draw the visualization.
+        var ac = new google.visualization.PieChart(document.getElementById('visualization2'));
+        ac.draw(data, {
+            title: 'Total Venta Distribuidores',
+            pieHole: 0.4,
+            is3D: true,
+            backgroundColor: '#F6F6F6',
+            colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6']
+
+        });
+        setTimeout(drawVisualization2, 1500);
+    }
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Year', 'Sales', 'Expenses'],
+          ['2004', 1000, 400],
+          ['2005', 1170, 460],
+          ['2006', 660, 1120],
+          ['2007', 1030, 540]
+        ]);
+
+        var options = {
+            title: 'Company Performance',
+            hAxis: { title: 'Year', titleTextStyle: { color: '#333' } },
+            vAxis: { minValue: 0 },
+            backgroundColor: '#F6F6F6',
+            colors: ['#9040D5',
+         '#620CAC',
+         '#A368D5',
+         '#8F2471',
+         '#7C005A',
+         '#BE008A',
+         '#3A2E85',
+         '#2C17B1',
+         '#160773',
+         '#BFB930',
+         '#FFF400'],
+            animation: {
+                duration: 1000,
+                easing: 'out',
+            }
+        };
+
+        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+        setTimeout(drawChart, 1500);
+    }
+    function updateChart() {
+        $.ajax(function () {
+
+            // use response to create/update DataTable
+            chart.draw(data, options);
+            // update the chart again in 2 seconds
+            setTimeout(updateChart, 1500);
+
+
+        });
+    }
+    function funcion() {
+        $.ajax(function () {
+            $('#tablesize').width("100%");
+            $('#tablesize').height("100%");
+            $('#tablesize').fadeOut(400);
+            setTimeout(funcion, 500);
+        });
+    }
+    updateChart();
+
+    google.setOnLoadCallback(drawVisualization2);
+    google.setOnLoadCallback(drawVisualization); google.setOnLoadCallback(drawVisualization3);
+    google.setOnLoadCallback(drawChart);
+</script>
+
+<div class="content-wrapper clear-fix">
+<div class="page-content  clear-fix page-content">
+    <div class="row-fluid" style="background-color: white; margin-bottom: 10px; padding: 10px 10px 10px 10px; width: inherit">
+        <a href="#" class="btn span3 purple">
+            <i class="icon-group"></i>
+            <div>Users</div>
+        </a>
+        <a href="#" class="btn span3 green">
+            <i class="icon-barcode"></i>
+            <div>Products</div>
+
+        </a>
+        <a href="#" class="btn span3 blue">
+            <i class="icon-bar-chart"></i>
+            <div>Reports</div>
+        </a>
+        <a href="#" class="btn span3 yellow">
+            <i class="icon-sitemap"></i>
+            <div>Categories</div>
+        </a>
+    </div>
+    <div class="page-content content-wrapper clear-fix " style="border: 1px; border-radius: 20px !important; padding: 10px 10px 10px 10px; min-height: 1000px; background-color: white">
+
+        <div style="border: 1px; border-radius: 20px !important; padding: 10px 10px 10px 10px">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="span6 light-grey table-bordered" style="background-color: rgb(246,246,246); margin-top: 10px;">
+                        <div class="portlet solid bordered " style="height: 100%;">
+                            <label class="portlet-title" style="background-color: rgba(108,131,45,0.4)">Chart no 1</label>
+                            <div class="portlet-body">
+                                <div id="visualization" style="width: 100%; height: 100%; margin-left: 0px !important; margin-top: 0px !important"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="span6 light-grey table table-bordered table-striped" style="background-color: rgb(246,246,246); margin-top: 10px;">
+                        <div class="portlet solid bordered " style="height: 100%;">
+                            <label class="portlet-title" style="background-color: rgba(108,131,45,0.4)">Chart no 1</label>
+                            <div class="portlet-body">
+                                <div id="visualization2" style="width: 100%; height: 100%; margin-left: 0px !important; margin-top: 0px !important"></div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                
+        </div>
+    </div>
+    </div>
+</div></div>
+<script>
+
+    funcion();
+</script>
+    
+   
+   
+ 
+
+
+
+ 
+
+
+        
+​

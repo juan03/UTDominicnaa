@@ -1,0 +1,320 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    WebGrid grid = new WebGrid(Model);
+    var value =0;
+   if(Model!=null){ foreach(var key in Model)
+    {
+        value = key.ReportType;
+        break;
+    }
+   }
+    
+    
+    
+   
+    
+    }
+@model List<UTDOMINICANA.Models.SalesReport>
+<script src="~/Scripts/jquery-ui-1.8.20.js"></script>
+<script src="~/Scripts/jquery-1.7.1.js"></script>
+<link href="~/css/datepicker.css")" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.7.1.min.js"></script>
+<script src="~/js/bootstrap-datepicker.js"></script>
+<link href="assets/css/bootstrap.min.css")" rel="stylesheet" />
+		<link rel="stylesheet" href="assets/css/font-awesome.min.css")" />
+ 
+    <div  class="portlet box red page-content content-wrapper clear-fix" >
+        <div class="tittle" style="background-color:rgba(53,170,71,0.8);border:1px;border-radius:20px !important;padding:10px 10px 10px 10px;margin-bottom:10px">
+           
+							<div class="tile bg-green">
+						
+                                
+						<div class="tile-object">
+							<div class="name" style="font-weight:bold;font-size:22px">
+								<i class="icon-bar-chart big"></i>&nbsp;Reporte de Ventas
+							</div>
+							<div class="number"></div>
+						</div>
+					</div>
+				
+
+        </div>
+  @using (Html.BeginForm("Index", "SalesReports", FormMethod.Get, new { @role = "form", @class = "form", @style = "background-color:rgba(255,255,255,1);border:1px;border-radius:20px !important;padding:10px 10px 10px 10px" }))
+  { 
+    
+          <div class="controls">
+          <div class="form-group">
+          <label for="startDate">Desde</label>
+          <input class="form-control input-lg date" name="START" type="text" id="startDate" placeholder="Fecha"/></div>
+           <div class="form-group">    
+          <label for="endDate">Hasta</label>
+          <input class="form-control input-lg date" name="END" type="text" id="endDate" placeholder="Fecha" /></div>
+            <div class="form-group">
+            <label for="Producto" >Producto</label>
+             <select class="form-control" id="Producto" name="producto">
+                 <option value="0">Todos</option>
+             </select>
+           </div>
+              <div class="form-group">
+            <label for="tipoProducto" >Tipo de producto</label>
+             <select class="form-control" id="tipoProducto" name="tipoProducto">
+                 <option value="0">Todos</option>
+             </select>
+
+           </div>
+              
+
+              <div class="form-group">
+            <label for="Proveedor" >Vendedores</label>
+             <select class="form-control" id="Vendedr" name="Proveedor">
+                 <option value="0">Todos</option>
+             </select></div>
+
+                 <div class="form-group">
+          <label for="comboTienda">Comercios</label>
+          <select class="form-control" name="TIENDA" id="comboTienda">
+              <option value="0" title="Todos">Todos</option></select></div>
+                  <div class="form-group">
+          <label for="comboCadenas">Cadenas</label>
+          <select class="form-control" name="Cadena" id="comboCadena">
+              <option value="0" title="Todos">Todos</option></select></div>
+              <div class="control-group">
+          <label class="control-label" for="comboReporteTotal">Reporte Total</label>
+                  <div class="controls">          <select class="form-control span6 m-wrap" name="Reporte" id="comboReporteTotal">
+               <option value="0" title="Todos">Ninguno</option>
+               <option value="1">Por Fecha</option>
+               <option value="2">Por Producto</option>
+               <option value="3">Por Tipo de Producto</option>
+               <option value="4">Por Proveedor</option>
+          </select>
+                  </div>
+
+              </div>
+
+           </div>
+        
+               <div class="form-group">
+           <button type="submit" class="btn blue">Buscar<i style="margin-left: 3px" class="icon-search white"></i></button></div>
+                    <div>
+              </div>
+    }
+        <div style="background-color:rgba(53,170,71,0.8);border:1px;border-radius:20px !important;padding:10px 10px 10px 10px;margin-bottom:10px">
+
+            <div class="row-fluid">
+									<button class="btn ">Excel
+										<i class=" icon-download-alt big"></i>
+										
+									
+									</button>
+									<button class="btn">Imprimir
+										<i class="icon-print big"></i>
+										
+									
+									</button>
+									
+								</div>
+
+        </div>
+        
+
+ <div id="tableContainer" class="table-responsive" style="background-color:rgba(255,255,255,1);border:1px;border-radius:20px !important;padding:10px 10px 10px 10px" >
+
+  <div id="tablaReportes" class="table table-bordered table-hover table-advanced" style="overflow:scroll">
+    <!--- Tabla Reportes en caso general -->
+       @if(value==0){<table class="table table-bordered table-condensed table-advanced">
+        
+         <thead>
+             <tr style="white-space:nowrap"> 
+                  <th>Fecha</th>
+                  <th>Tipo Producto</th>
+                  <th>Producto</th>
+                  <th>Tienda</th>
+                  <th>Monto</th>
+                  <th>Descuento Tienda</th>
+                  <th>Monto_Neto</th>
+                  <th>Numero de Autentificacion</th>
+                  <th>Porcentaje tienda</th>
+                  <th>Referencia</th>
+             </tr>
+         </thead>
+         <tbody>
+             @if(Model!=null){foreach(var item in Model)
+             {
+                 <tr style="white-space:nowrap">
+                     <td>@item.DATE</td>
+                     <td>@item.PRODUCT_TYPE</td>
+                     <td>@item.PRODUCT</td>
+                     <td>@item.MERCHANT</td>
+                     <td>@item.AMOUNT</td>
+                     <td>@item.MCOMM_COMMISSION</td>
+                     <td>@item.NET_AMOUNT</td>
+                     <td>@item.AUTH_NUMBER</td>
+                     <td>@item.MCOMM_PERCENTAGE
+                     </td>
+                     <td>@item.REFERENCE</td>
+                </tr>
+                 
+             }}
+         </tbody>
+         
+        
+     </table>
+       }
+       <!--- Tabla Reportes en caso Por fecha -->
+       @if (value == 1)
+         {
+           <table class="table table-bordered table-condensed table-advanced">
+             <thead>
+                 <tr style="white-space:nowrap">
+                     <th>Dia</th>
+                     <th>Cantidad</th>
+                     <th>Total Gross</th>
+                     <th>Descuento</th>
+                     <th>Monto Neto</th>
+                 </tr>
+                 
+             </thead>
+             <tbody>
+               @foreach(var key in Model){
+                   <tr>
+                       <td>
+                        @key.DATE
+                       </td>
+                       <td>
+                        @key.QUANTITY
+                       </td>
+                       <td>
+                           @key.AMOUNT
+                       </td>
+                       <td>
+                           @key.MCOMM_COMMISSION
+                       </td>
+                       <td>
+                           @key.NET_AMOUNT
+                       </td>
+                 </tr>
+               }
+
+             </tbody>
+               </table>
+         }
+            <!--- Tabla Reportes en caso Por Producto -->
+      @if (value == 2)
+      {
+       <table class="table table-bordered table-condensed table-advanced">
+           <thead>
+               <tr>
+                   <th>Proveedor</th>
+                   <th>Tipo Producto</th>
+                   <th>Producto</th>
+                   <th>Cantidad</th>
+                   <th>Total Gross</th>
+                   <th>Descuento</th>
+                   <th>Monto Neto</th>
+               </tr>
+           </thead>
+           <tbody>
+             @foreach(var key in Model){
+             <tr>
+                 <td>@key.PROVIDER</td>
+                 <td>@key.PRODUCT_TYPE</td>
+                 <td>@key.PRODUCT</td>
+                 <td>@key.QUANTITY</td>
+                 <td>@key.AMOUNT</td>
+                 <td>@key.MCOMM_COMMISSION</td>
+                 <td>@key.NET_AMOUNT</td>
+             </tr>
+             
+             }
+           </tbody>
+           </table>
+
+
+      }
+      @if (value == 3)
+      {
+          
+       <table class="table table-bordered table-condensed table-advanced">
+           <thead>
+               <tr>
+                   <th>Tipo Producto</th>
+                   <th>Cantidad</th>
+                   <th>Total Gross</th>
+                   <th>Descuento</th>
+                   <th>Monto Neto</th>
+               </tr>
+           </thead>
+           <tbody>
+               @foreach(var key in Model)
+               {
+                   <tr>
+                       <td>@key.PRODUCT_TYPE</td>
+                       <td>@key.QUANTITY</td>
+                       <td>@key.AMOUNT</td>
+                       <td>@key.MCOMM_COMMISSION</td>
+                       <td>@key.NET_AMOUNT</td>
+                   </tr>
+               }
+           </tbody>
+
+
+
+       </table>
+
+
+      }
+      @if(value==4)
+      {
+          <table class="table table-bordered table-condensed table-advanced">
+              <thead>
+                  <tr>
+                      <th>Proveedor</th>
+                      <th>Total</th>
+                      <th>Descuento</th>
+                      <th>Monto Neto</th>
+                      <th>Cantidad</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  @foreach (var key in Model)
+                  {
+                      <tr>
+                          <td>@key.PROVIDER</td>
+                          <td>@key.AMOUNT</td>
+                          <td>@key.MCOMM_COMMISSION</td>
+                          <td>@key.NET_AMOUNT</td>
+                          <td>@key.QUANTITY</td>
+                      </tr>
+                  }
+              </tbody>
+              </table>
+          
+      }
+  </div>
+ 
+</div>
+         </div> 
+        
+    
+    <script type="text/javascript">
+        $('.date').datepicker();
+        $("#ajax-progress-dialog").dialog({
+            autoOpen: false,
+            draggable: false,
+            modal: true,
+            height: 80,
+            resizable: false,
+            title: "Processing, please wait...",
+            closeOnEscape: false,
+            open: function () { $(".ui-dialog-titlebar-close").hide(); } // Hide close button
+
+        });
+
+      
+       
+   
+</script>
+   
+
+

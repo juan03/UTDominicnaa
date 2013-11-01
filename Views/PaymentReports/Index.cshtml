@@ -1,0 +1,125 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    WebGrid grid = new WebGrid(Model);
+ }
+@model List<UTDOMINICANA.Models.Payments>
+<script src="~/Scripts/jquery-ui-1.8.20.js"></script>
+<script src="~/Scripts/jquery-1.7.1.js"></script>
+<link href="~/css/datepicker.css")" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.7.1.min.js"></script>
+ <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="~/js/bootstrap-datepicker.js"></script>
+<link href="assets/css/bootstrap.min.css")" rel="stylesheet" />
+		<link rel="stylesheet" href="assets/css/font-awesome.min.css")" />
+ <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css")" />
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<link rel="stylesheet" href="/resources/demos/style.css")" />
+ 
+    <div  class="portlet box red page-content content-wrapper clear-fix" >
+        <div class="tittle" style="background-color:rgba(53,170,71,0.8);border:1px;border-radius:20px !important;padding:10px 10px 10px 10px;margin-bottom:10px">
+           
+							<div class="tile bg-green">
+					
+                                
+						<div class="tile-object">
+							<div class="name" style="font-weight:bold;font-size:22px">
+								<h5><i class="icon-bar-chart"></i>&nbsp;Reporte de Pagos</h5>
+							</div>
+							<div class="number"></div>
+						</div>
+					</div>
+				
+
+        </div>
+  @using (Html.BeginForm("Index", "PaymentReports", FormMethod.Get, new { @role = "form", @class = "form", @style = "background-color:rgba(255,255,255,1);border:1px;border-radius:20px !important;padding:10px 10px 10px 10px" }))
+  { 
+    
+          <div class="controls">
+          <div class="form-group">
+          <label for="startDate">Desde</label>
+          <input class="form-control input-lg date" name="START" type="text" id="startDate" placeholder="Fecha"/></div>
+           <div class="form-group">    
+          <label for="endDate">Hasta</label>
+          <input class="form-control input-lg date" name="END" type="text" id="endDate" placeholder="Fecha" /></div>
+            <div class="form-group ui-widget">
+          <label for="comboTienda">Tienda</label>
+          <select class="form-control" name="TIENDA" id="combobox">
+              <option value="0" title="Todos">Todos</option></select></div>
+          
+             
+
+               <div class="form-group">
+           <button type="submit" class="btn blue">Buscar<i style="margin-left: 3px" class="icon-search white"></i></button></div>
+                    <div>
+              </div></div>
+  }
+        <div style="background-color:rgba(53,170,71,0.8);border:1px;border-radius:20px !important;padding:10px 10px 10px 10px;margin-bottom:10px">
+
+            <div class="row-fluid">
+									<button class="btn ">Excel
+										<i class=" icon-download-alt big"></i>
+										
+									
+									</button>
+									<button class="btn" onclick=" PrintElem(table)">Imprimir
+										<i class="icon-print big"></i>
+										
+									
+									</button>
+									
+								</div>
+
+        </div>
+
+ <div id="tableContainer" class="table-responsive" style="background-color:rgba(255,255,255,1);border:1px;border-radius:20px !important;padding:10px 10px 10px 10px" >
+   
+  <div id="tablaReportes" class="table-responsive"  style="overflow:scroll">
+     <table id="table" class="table table-bordered table-condensed table-advanced">
+         <thead>
+             <tr> 
+                  <th>Fecha</th>
+                  <th>MONTO</th>
+                  <th>NOTA</th>
+                  <th>Nuevo Balance</th>
+                  <th>Viejo Balance</th>
+                  <th>De</th>
+                  <th>PARA</th>
+                  <th>Usuario</th>
+               
+             </tr>
+         </thead>
+         <tbody>
+            @if(Model!=null){ foreach(var item in Model)
+             {
+                 <tr >
+                     <td>@item.FECHA</td>
+                     <td>@item.MONTO</td>
+                     <td>@item.NOTA</td>
+                     <td>@item.NUEVO_BALANCE</td>
+                     <td>@item.VIEJO_BALANCE</td>
+                     <td>@item.DE</td>
+                     <td>@item.PARA</td>
+                     <td>@item.USUARIO</td>
+                 </tr>
+                 
+             }
+            }
+         </tbody>
+     </table>
+     
+
+  </div>
+ 
+</div>
+          </div>
+        
+    
+    <script type="text/javascript">
+        $('.date').datepicker();
+        $('#table').sortable();
+     
+</script>
+   
+
