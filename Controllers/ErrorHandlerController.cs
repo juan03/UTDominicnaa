@@ -19,7 +19,7 @@ namespace UTDOMINICANA.Controllers
         public ActionResult HttpError500()
         {
 
-            ViewBag.error = "500";
+            ViewBag.error = "";
             return View();
         }
 
