@@ -19,7 +19,7 @@ namespace UTDOMINICANA.Controllers
         public ActionResult HttpError500()
         {
 
-            ViewBag.error = "";
+            ViewBag.error = "masacote";
             return View();
         }
 
